@@ -1,2 +1,5 @@
+# Dependencies
+node_modules
+
+# Vercel and build outputs
 .vercel
-.env*
