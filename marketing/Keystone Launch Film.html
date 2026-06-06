@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Keystone — Launch Film</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; height:100%; background:#0a0a0a; }
+  #root{ height:100vh; }
+  .film-head{ height:52px; flex-shrink:0; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:0 22px; background:#0a0a0a; border-bottom:1px solid rgba(255,255,255,.08); }
+  .film-head .fh-l{ display:flex; align-items:center; gap:16px; }
+  .film-head a{ font-family:'Geist Mono',ui-monospace,monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:#a1a1aa; text-decoration:none; display:inline-flex; align-items:center; gap:7px; transition:color .2s; }
+  .film-head a:hover{ color:#f4f4f5; }
+  .film-head a svg{ width:13px; height:13px; }
+  .film-head .ftitle{ font-family:'Geist Mono',ui-monospace,monospace; font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:#52525b; }
+  .film-holder{ position:relative; width:100%; height:calc(100vh - 52px); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="animations.jsx"></script>
+<script type="text/babel">
+  const { Stage, useTime, useTimeline, interpolate, Easing, clamp } = window;
+
+  // dev hook: window.__seek(seconds) — for previewing specific frames
+  function SeekHook(){
+    const { setTime } = useTimeline();
+    React.useEffect(() => { window.__seek = setTime; }, [setTime]);
+    return null;
+  }
+
+  const GEIST = "'Geist', system-ui, sans-serif";
+  const MONO  = "'Geist Mono', ui-monospace, monospace";
+  const INK = '#f4f4f5', MUT = '#a1a1aa', FAINT = '#71717a';
+
+  const center = { position:'absolute', inset:0, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', textAlign:'center', padding:'0 8%' };
+  const eyebrow = { fontFamily:MONO, fontSize:22, letterSpacing:'0.24em', textTransform:'uppercase', color:MUT };
+
+  // opacity envelope across a scene window
+  function fade(t, start, end, fin, fout){
+    if(t < start || t > end) return 0;
+    return Math.min(clamp((t-start)/fin,0,1), clamp((end-t)/fout,0,1));
+  }
+  const eo = (x) => Easing.easeOutCubic(clamp(x,0,1));
+
+  // ── Persistent backdrop ──────────────────────────────
+  function Backdrop(){
+    const t = useTime();
+    const drift = (t/30)*40;
+    return (
+      <div style={{ position:'absolute', inset:0, background:'#0b0b0d', overflow:'hidden' }}>
+        <div style={{ position:'absolute', inset:-60,
+          backgroundImage:'linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px)',
+          backgroundSize:'72px 72px',
+          transform:`translateY(${-drift}px)` }} />
+        <div style={{ position:'absolute', inset:0, background:'radial-gradient(ellipse 65% 60% at 50% 50%, transparent 38%, rgba(0,0,0,0.72))' }} />
+      </div>
+    );
+  }
+
+  // ── Scene 1 · the opportunity (count up) ─────────────
+  function SceneOpportunity(){
+    const t = useTime();
+    const op = fade(t, 0, 5, 0.7, 0.6);
+    if(op <= 0) return null;
+    const val = interpolate([0.2, 2.4],[0, 1.2], Easing.easeOutExpo)(t);
+    const rise = (1 - eo(t/0.7)) * 22;
+    return (
+      <div style={{ ...center, opacity:op, transform:`translateY(${rise}px)` }}>
+        <div style={{ ...eyebrow, marginBottom:30 }}>The opportunity</div>
+        <div style={{ fontFamily:GEIST, fontWeight:600, fontSize:210, letterSpacing:'-0.045em', color:INK, lineHeight:0.9 }}>
+          {'$' + val.toFixed(1) + 'T'}
+        </div>
+        <div style={{ fontFamily:GEIST, fontWeight:300, fontSize:40, letterSpacing:'-0.02em', color:MUT, marginTop:26 }}>
+          in federal funding, awarded every year.
+        </div>
+      </div>
+    );
+  }
+
+  // ── Scene 2 · the problem (stacked lines) ────────────
+  function SceneProblem(){
+    const t = useTime();
+    const op = fade(t, 5, 10, 0.5, 0.6);
+    if(op <= 0) return null;
+    const lines = [
+      { a:'Most of it goes to', d:5.2 },
+      { a:'whoever files the', d:5.55 },
+    ];
+    const lastO = eo((t-5.9)/0.5);
+    return (
+      <div style={{ ...center, opacity:op }}>
+        <div>
+          {lines.map((l,i)=>{
+            const e = eo((t-l.d)/0.5);
+            return (
+              <div key={i} style={{ fontFamily:GEIST, fontWeight:600, fontSize:104, letterSpacing:'-0.035em', color:INK, lineHeight:1.06, opacity:e, transform:`translateY(${(1-e)*26}px)` }}>{l.a}</div>
+            );
+          })}
+          <div style={{ fontFamily:GEIST, fontWeight:600, fontSize:104, letterSpacing:'-0.035em', lineHeight:1.06, opacity:lastO, transform:`translateY(${(1-lastO)*26}px)` }}>
+            <span style={{ color:INK }}>proposal </span><span style={{ color:MUT }}>best.</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Scene 3 · the founder ────────────────────────────
+  function SceneFounder(){
+    const t = useTime();
+    const op = fade(t, 10, 15, 0.6, 0.6);
+    if(op <= 0) return null;
+    const glow = 0.22 + 0.08 * Math.sin((t-10) * 1.6);
+    const eyeO = eo((t-10.2)/0.6);
+    const e = eo((t-10.5)/0.8);
+    return (
+      <div style={{ position:'absolute', inset:0, opacity:op }}>
+        <div style={{ position:'absolute', left:'50%', bottom:-260, width:1100, height:620, transform:'translateX(-50%)',
+          background:`radial-gradient(ellipse at center, rgba(255,232,196,${glow}), transparent 68%)`, filter:'blur(26px)' }} />
+        <div style={{ ...center }}>
+          <div style={{ ...eyebrow, marginBottom:28, opacity:eyeO }}>From the founder</div>
+          <div style={{ fontFamily:GEIST, fontWeight:600, fontSize:118, letterSpacing:'-0.035em', color:INK, lineHeight:1.0, opacity:e, transform:`translateY(${(1-e)*24}px)` }}>
+            So I learned<br/>to file it myself.
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Scene 4 · the proof (terms resolve) ──────────────
+  function SceneProof(){
+    const t = useTime();
+    const op = fade(t, 15, 21, 0.5, 0.6);
+    if(op <= 0) return null;
+    const terms = [
+      { x:'SAM.gov · UEI registered', d:15.3 },
+      { x:'Commercial Solutions Opening', d:15.85 },
+      { x:'AoI-902 · submitted solo', d:16.4 },
+    ];
+    const sumO = eo((t-18.4)/0.8);
+    return (
+      <div style={{ ...center, opacity:op }}>
+        <div style={{ display:'flex', flexDirection:'column', gap:30, alignItems:'center' }}>
+          {terms.map((tm,i)=>{
+            const e = eo((t-tm.d)/0.95);
+            const blur = (1-e) * 16;
+            return (
+              <div key={i} style={{ fontFamily:MONO, fontWeight:500, fontSize:58, letterSpacing:'0.01em', color:INK, opacity:e, filter:`blur(${blur}px)` }}>{tm.x}</div>
+            );
+          })}
+          <div style={{ fontFamily:MONO, fontSize:26, letterSpacing:'0.14em', textTransform:'uppercase', color:FAINT, opacity:sumO, marginTop:14 }}>
+            // no consultant. just the work.
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Scene 5 · the mark locks in ──────────────────────
+  function SceneMark(){
+    const t = useTime();
+    const op = fade(t, 21, 26, 0.5, 0.5);
+    if(op <= 0) return null;
+    const p = clamp((t-21.2)/0.95, 0, 1);
+    const eb = Easing.easeOutBack(p);
+    const drop = (1-p) * -90;
+    const markO = clamp((t-21.2)/0.5, 0, 1);
+    const lineW = eo((t-22.3)/0.8) * 300;
+    const subO = eo((t-22.7)/0.8);
+    return (
+      <div style={{ ...center, opacity:op }}>
+        <img src="../assets/logo-mark-dark.png" alt="Keystone"
+          style={{ height:260, opacity:markO, transform:`translateY(${drop}px) scale(${0.62 + 0.38*eb})`, filter:'drop-shadow(0 30px 60px rgba(0,0,0,.6))' }} />
+        <div style={{ height:2, background:'#3f3f46', width:lineW, marginTop:42 }} />
+        <div style={{ ...eyebrow, marginTop:26, opacity:subO }}>the piece that holds it together</div>
+      </div>
+    );
+  }
+
+  // ── Scene 6 · end card ───────────────────────────────
+  function SceneEnd(){
+    const t = useTime();
+    const op = fade(t, 26, 30, 0.6, 0.5);
+    if(op <= 0) return null;
+    const e = eo((t-26.2)/0.7);
+    const tagO = eo((t-26.8)/0.8);
+    const urlO = eo((t-27.5)/0.8);
+    return (
+      <div style={{ ...center, opacity:op }}>
+        <img src="../assets/logo-mark-dark.png" alt="" style={{ height:84, opacity:e, marginBottom:30 }} />
+        <div style={{ fontFamily:GEIST, fontWeight:600, fontSize:128, letterSpacing:'-0.045em', color:INK, opacity:e, transform:`translateY(${(1-e)*18}px)` }}>Keystone</div>
+        <div style={{ fontFamily:GEIST, fontWeight:300, fontSize:48, letterSpacing:'-0.02em', color:'#d4d4d8', opacity:tagO, marginTop:20 }}>Funding favors the well-prepared.</div>
+        <div style={{ fontFamily:MONO, fontSize:24, letterSpacing:'0.2em', color:FAINT, opacity:urlO, marginTop:46 }}>KEYSTONE.CO</div>
+      </div>
+    );
+  }
+
+  function Film(){
+    return (
+      <Stage width={1920} height={1080} duration={30} background="#0b0b0d" persistKey="keystone-film">
+        <SeekHook />
+        <Backdrop />
+        <SceneOpportunity />
+        <SceneProblem />
+        <SceneFounder />
+        <SceneProof />
+        <SceneMark />
+        <SceneEnd />
+      </Stage>
+    );
+  }
+
+  function Page(){
+    return (
+      <div style={{ height:'100vh', display:'flex', flexDirection:'column' }}>
+        <div className="film-head">
+          <div className="fh-l">
+            <a href="Keystone Launch Strategy.html">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"></path></svg>
+              Strategy
+            </a>
+            <span className="ftitle">Launch Film · 0:30 · 1920×1080</span>
+          </div>
+          <a href="../Keystone.html">Live site
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+          </a>
+        </div>
+        <div className="film-holder">
+          <Film />
+        </div>
+      </div>
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById('root')).render(<Page />);
+</script>
+</body>
+</html>

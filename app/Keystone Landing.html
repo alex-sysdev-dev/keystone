@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Keystone — Federal funding, without the chaos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../assets/portal.css" />
+<style>
+  body{ height:auto; overflow-x:hidden; }
+  .lp-grid{ position:fixed; inset:0; z-index:0; pointer-events:none; background-image:linear-gradient(var(--grid-line) 1px,transparent 1px),linear-gradient(90deg,var(--grid-line) 1px,transparent 1px); background-size:54px 54px; }
+  .lp{ position:relative; z-index:1; }
+  .wrap{ max-width:1200px; margin:0 auto; padding:0 32px; }
+  section{ position:relative; }
+
+  /* nav */
+  .lnav{ position:sticky; top:0; z-index:30; backdrop-filter:blur(14px); background:color-mix(in srgb, var(--bg) 80%, transparent); border-bottom:1px solid var(--line); transition:background .4s var(--ease); }
+  .lnav-in{ max-width:1200px; margin:0 auto; padding:0 32px; height:68px; display:flex; align-items:center; justify-content:space-between; gap:24px; }
+  .lbrand{ display:flex; align-items:center; gap:10px; }
+  .lbrand img{ height:30px; }
+  .lbrand .bn{ font-weight:600; font-size:18px; letter-spacing:-0.02em; }
+  .lnav-links{ display:flex; align-items:center; gap:6px; }
+  .lnav-links a{ font-size:14px; color:var(--ink-2); padding:8px 13px; border-radius:var(--r-sm); transition:background .2s,color .2s; }
+  .lnav-links a:hover{ background:var(--bg-2); color:var(--ink); }
+  .lnav-right{ display:flex; align-items:center; gap:10px; }
+
+  /* hero */
+  .hero{ padding:84px 0 70px; text-align:center; }
+  .hero .tag{ display:inline-flex; align-items:center; gap:9px; border:1px solid var(--line-strong); border-radius:var(--r-full); padding:6px 14px; font-family:var(--font-label); font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-2); background:var(--surface); margin-bottom:30px; }
+  .hero .tag .d{ width:6px; height:6px; border-radius:50%; background:var(--ok); }
+  .hero h1{ font-size:clamp(40px,6.2vw,76px); font-weight:600; line-height:1.0; letter-spacing:-0.04em; margin:0 auto; max-width:16ch; text-wrap:balance; }
+  .hero h1 em{ font-style:normal; color:var(--muted); }
+  .hero p.sub{ font-size:clamp(17px,1.7vw,21px); font-weight:300; color:var(--ink-2); max-width:56ch; margin:26px auto 0; line-height:1.55; }
+  .hero-cta{ display:flex; gap:13px; justify-content:center; margin-top:36px; flex-wrap:wrap; }
+  .btn-lg{ padding:14px 26px; font-size:15px; }
+  .hero-note{ font-size:13px; color:var(--muted); margin-top:20px; }
+
+  /* preview window */
+  .preview{ position:relative; max-width:1020px; margin:60px auto 0; border-radius:var(--r-xl); overflow:hidden; border:1px solid var(--line-strong); background:var(--surface); box-shadow:var(--shadow-glass); }
+  .pv-bar{ height:46px; display:flex; align-items:center; gap:14px; padding:0 18px; border-bottom:1px solid var(--line); background:var(--surface-2); }
+  .pv-dots{ display:flex; gap:7px; }
+  .pv-dots i{ width:11px; height:11px; border-radius:50%; background:var(--line-strong); }
+  .pv-url{ flex:1; max-width:280px; margin:0 auto; height:26px; border-radius:var(--r-full); background:var(--bg-2); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-family:var(--font-label); font-size:11px; color:var(--muted); letter-spacing:0.04em; }
+  .pv-body{ display:grid; grid-template-columns:200px 1fr; min-height:430px; }
+  .pv-side{ border-right:1px solid var(--line); padding:18px 14px; background:var(--surface); }
+  .pv-side .pvs-brand{ display:flex; align-items:center; gap:9px; padding:4px 8px 18px; }
+  .pv-side .pvs-brand img{ height:22px; }
+  .pv-side .pvs-brand span{ font-weight:600; font-size:14px; }
+  .pv-nav{ display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:var(--r-md); font-size:13px; color:var(--muted); }
+  .pv-nav.on{ background:var(--brand); color:var(--on-brand); }
+  .pv-nav .pvi{ width:15px; height:15px; border-radius:4px; background:currentColor; opacity:.4; }
+  .pv-nav.on .pvi{ opacity:.9; }
+  .pv-main{ padding:24px; background:var(--bg); }
+  .pv-greet{ font-family:var(--font-label); font-size:9px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); }
+  .pv-h{ font-size:20px; font-weight:600; letter-spacing:-0.02em; margin:7px 0 18px; }
+  .pv-tiles{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:14px; }
+  .pv-tile{ border:1px solid var(--line); border-radius:var(--r-md); background:var(--surface); padding:15px; }
+  .pv-tile .l{ font-family:var(--font-label); font-size:8.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); }
+  .pv-tile .v{ font-size:23px; font-weight:600; letter-spacing:-0.02em; margin-top:9px; }
+  .pv-tile .v small{ font-size:12px; color:var(--muted); }
+  .pv-track{ border:1px solid var(--line); border-radius:var(--r-md); background:var(--surface); padding:16px; display:flex; align-items:center; gap:0; }
+  .pv-st{ flex:1; position:relative; display:flex; flex-direction:column; gap:5px; }
+  .pv-st .dot{ width:14px; height:14px; border-radius:50%; border:2px solid var(--line-strong); background:var(--surface); }
+  .pv-st.done .dot{ background:var(--brand); border-color:var(--brand); }
+  .pv-st.cur .dot{ border-color:var(--brand); box-shadow:0 0 0 3px var(--info-bg); }
+  .pv-st .bar{ position:absolute; top:6px; left:14px; right:0; height:2px; background:var(--line-strong); }
+  .pv-st.done .bar{ background:var(--brand); }
+  .pv-st:last-child .bar{ display:none; }
+  .pv-st .t{ font-size:10px; font-weight:500; }
+  .pv-st.todo .t{ color:var(--muted); font-weight:400; }
+  .pv-glow{ position:absolute; inset:0; pointer-events:none; border-radius:inherit; background:radial-gradient(60% 50% at 50% 0%, var(--sheen), transparent 70%); opacity:.5; }
+
+  /* trust */
+  .trust{ padding:48px 0 10px; text-align:center; }
+  .trust .lbl{ font-family:var(--font-label); font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase; color:var(--muted); margin-bottom:24px; }
+  .trust-row{ display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:14px 40px; }
+  .trust-row span{ font-size:19px; font-weight:600; letter-spacing:-0.01em; color:var(--ink); opacity:.55; }
+
+  /* section heading */
+  .sec{ padding:80px 0; }
+  .sec-head{ max-width:680px; margin:0 auto 50px; text-align:center; }
+  .sec-head .label{ display:block; margin-bottom:16px; }
+  .sec-head h2{ font-size:clamp(30px,3.6vw,44px); font-weight:600; letter-spacing:-0.03em; line-height:1.08; margin:0; text-wrap:balance; }
+  .sec-head p{ font-size:17px; font-weight:300; color:var(--ink-2); margin:16px auto 0; max-width:56ch; line-height:1.6; }
+
+  /* feature grid */
+  .feat-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  .feat .ic{ width:46px; height:46px; border-radius:var(--r-md); border:1px solid var(--line-strong); display:flex; align-items:center; justify-content:center; color:var(--ink); background:var(--bg); margin-bottom:20px; }
+  .feat .ic svg{ width:21px; height:21px; }
+  .feat h3{ font-size:18px; font-weight:600; letter-spacing:-0.01em; margin:0 0 9px; }
+  .feat p{ font-size:14.5px; font-weight:300; color:var(--ink-2); line-height:1.6; margin:0; }
+
+  /* steps */
+  .steps{ display:grid; grid-template-columns:repeat(3,1fr); gap:0; border:1px solid var(--line); border-radius:var(--r-lg); overflow:hidden; background:var(--surface); }
+  .step{ padding:34px 30px; border-right:1px solid var(--line); }
+  .step:last-child{ border-right:none; }
+  .step .sn{ font-family:var(--font-label); font-size:12px; color:var(--ink-2); letter-spacing:0.04em; margin-bottom:18px; }
+  .step .bar{ height:2px; background:var(--line-strong); margin-bottom:20px; position:relative; }
+  .step .bar::after{ content:""; position:absolute; left:0; top:0; height:2px; width:40%; background:var(--brand); }
+  .step h3{ font-size:18px; font-weight:600; letter-spacing:-0.01em; margin:0 0 8px; }
+  .step p{ font-size:14px; font-weight:300; color:var(--ink-2); line-height:1.55; margin:0; }
+
+  /* quote */
+  .quote{ max-width:860px; margin:0 auto; text-align:center; }
+  .quote .qm{ font-size:54px; line-height:0.5; color:var(--line-strong); }
+  .quote p{ font-size:clamp(22px,2.6vw,30px); font-weight:300; line-height:1.45; letter-spacing:-0.02em; margin:18px 0 24px; text-wrap:balance; }
+  .quote .qa{ font-family:var(--font-label); font-size:12px; letter-spacing:0.06em; color:var(--muted); }
+
+  /* big cta */
+  .cta-band{ position:relative; border:1px solid var(--line-strong); border-radius:var(--r-xl); padding:64px 48px; text-align:center; overflow:hidden; box-shadow:var(--shadow-glass); }
+  .cta-band .cg{ position:absolute; inset:0; pointer-events:none; background-image:linear-gradient(var(--grid-line) 1px,transparent 1px),linear-gradient(90deg,var(--grid-line) 1px,transparent 1px); background-size:40px 40px; -webkit-mask-image:radial-gradient(ellipse 70% 100% at 50% 0%,#000,transparent 72%); mask-image:radial-gradient(ellipse 70% 100% at 50% 0%,#000,transparent 72%); }
+  .cta-band h2{ position:relative; font-size:clamp(30px,3.8vw,46px); font-weight:600; letter-spacing:-0.03em; margin:0; line-height:1.05; }
+  .cta-band p{ position:relative; font-size:17px; font-weight:300; color:var(--ink-2); margin:16px auto 30px; max-width:48ch; }
+
+  /* footer */
+  .lfoot{ border-top:1px solid var(--line); padding:54px 0 40px; margin-top:80px; }
+  .lfoot-in{ display:flex; justify-content:space-between; align-items:flex-start; gap:30px; flex-wrap:wrap; }
+  .lfoot .lbrand{ margin-bottom:12px; }
+  .lfoot p{ font-size:14px; color:var(--muted); font-weight:300; max-width:30ch; margin:0; }
+  .lfoot-cols{ display:flex; gap:64px; flex-wrap:wrap; }
+  .lfoot-col h4{ font-family:var(--font-label); font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--faint); margin:0 0 14px; }
+  .lfoot-col a{ display:block; font-size:14px; color:var(--ink-2); padding:5px 0; }
+  .lfoot-col a:hover{ color:var(--ink); }
+  .lfoot-bot{ margin-top:46px; padding-top:24px; border-top:1px solid var(--line); display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; font-family:var(--font-label); font-size:11px; letter-spacing:0.06em; color:var(--faint); }
+
+  @media (max-width:860px){
+    .lnav-links{ display:none; }
+    .pv-body{ grid-template-columns:1fr; }
+    .pv-side{ display:none; }
+    .feat-grid{ grid-template-columns:1fr; }
+    .steps{ grid-template-columns:1fr; }
+    .step{ border-right:none; border-bottom:1px solid var(--line); }
+    .pv-tiles{ grid-template-columns:1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="lp-grid"></div>
+<div class="lp">
+
+<nav class="lnav">
+  <div class="lnav-in">
+    <a class="lbrand" href="#top"><img class="logo-light" src="../assets/logo-mark.png" alt="" /><img class="logo-dark" src="../assets/logo-mark-dark.png" alt="" /><span class="bn">Keystone</span></a>
+    <div class="lnav-links">
+      <a href="#features">Product</a>
+      <a href="#how">How it works</a>
+      <a href="#why">Why Keystone</a>
+    </div>
+    <div class="lnav-right">
+      <button class="icon-btn" id="themeBtn" aria-label="Theme"><span class="tt-moon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg></span><span class="tt-sun"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"/></svg></span></button>
+      <a href="Keystone Portal.html" class="btn btn-ghost btn-sm">Sign in</a>
+      <a href="Keystone Portal.html" class="btn btn-primary btn-sm">Get started</a>
+    </div>
+  </div>
+</nav>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="tag"><span class="d"></span> Now onboarding founders &amp; PIs</div>
+      <h1>Federal funding, <em>without the chaos.</em></h1>
+      <p class="sub">Keystone is the advisory and the workspace behind your grant. Track every stage, never miss a deadline, and submit to spec — all in one calm, premium portal.</p>
+      <div class="hero-cta">
+        <a href="Keystone Portal.html" class="btn btn-primary btn-lg">Open your portal<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a href="#features" class="btn btn-ghost btn-lg">See how it works</a>
+      </div>
+      <div class="hero-note">No proposal experience required · An honest go / no-go before you commit</div>
+
+      <!-- PREVIEW -->
+      <div class="preview">
+        <div class="pv-bar"><div class="pv-dots"><i></i><i></i><i></i></div><div class="pv-url">app.keystone.co · dashboard</div></div>
+        <div class="pv-body">
+          <div class="pv-side">
+            <div class="pvs-brand"><img class="logo-light" src="../assets/logo-mark.png" alt="" /><img class="logo-dark" src="../assets/logo-mark-dark.png" alt="" /><span>Keystone</span></div>
+            <div class="pv-nav on"><span class="pvi"></span>Dashboard</div>
+            <div class="pv-nav"><span class="pvi"></span>My Proposal</div>
+            <div class="pv-nav"><span class="pvi"></span>Documents</div>
+            <div class="pv-nav"><span class="pvi"></span>Compliance</div>
+            <div class="pv-nav"><span class="pvi"></span>Messages</div>
+          </div>
+          <div class="pv-main">
+            <div class="pv-greet">Good morning, Elena</div>
+            <div class="pv-h">Your R01 is on track for July 21.</div>
+            <div class="pv-tiles">
+              <div class="pv-tile"><div class="l">To deadline</div><div class="v">46<small>d</small></div></div>
+              <div class="pv-tile"><div class="l">Stage</div><div class="v">3<small> / 5</small></div></div>
+              <div class="pv-tile"><div class="l">Compliance</div><div class="v">87<small>%</small></div></div>
+            </div>
+            <div class="pv-track">
+              <div class="pv-st done"><span class="dot"></span><span class="bar"></span><span class="t">Qualify</span></div>
+              <div class="pv-st done"><span class="dot"></span><span class="bar"></span><span class="t">Strategize</span></div>
+              <div class="pv-st cur"><span class="dot"></span><span class="bar"></span><span class="t">Write</span></div>
+              <div class="pv-st todo"><span class="dot"></span><span class="bar"></span><span class="t">Comply</span></div>
+              <div class="pv-st todo"><span class="dot"></span><span class="bar"></span><span class="t">Submit</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="pv-glow"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST -->
+  <section class="trust">
+    <div class="wrap">
+      <div class="lbl">Built for applicants to every major funder</div>
+      <div class="trust-row"><span>NIH</span><span>NSF</span><span>DOE</span><span>USTRANSCOM</span><span>USDA</span><span>HRSA</span><span>SBIR / STTR</span></div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="sec" id="features">
+    <div class="wrap">
+      <div class="sec-head"><span class="label">The workspace</span><h2>Everything your grant needs, in one place.</h2><p>No more email threads, lost versions, or guessing where things stand. Your whole proposal lives in one calm, structured portal.</p></div>
+      <div class="feat-grid">
+        <div class="card glass card-pad feat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h9l5 5v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5M8 13h8M8 17h5"/></svg></div><h3>Always know where you stand</h3><p>A clear five-stage tracker from qualify to submit — see exactly what's done and what's next.</p></div>
+        <div class="card glass card-pad feat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><h3>Never miss a deadline</h3><p>A live countdown to your submission date, with milestones that keep the whole engagement ahead of schedule.</p></div>
+        <div class="card glass card-pad feat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><h3>Approve documents in a click</h3><p>Review, request changes, or approve every draft in one place — versions tracked, nothing lost.</p></div>
+        <div class="card glass card-pad feat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3.5v5C20 16.5 16.7 20 12 21.5 7.3 20 4 16.5 4 11.5v-5z"/><path d="M9 12l2 2 4-4"/></svg></div><h3>Win on merit, not technicalities</h3><p>A live compliance checklist against your exact solicitation — every requirement cleared before you submit.</p></div>
+        <div class="card glass card-pad feat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8 8 0 0 1-11.6 7.1L3 21l2.4-6.4A8 8 0 1 1 21 11.5z"/></svg></div><h3>Your lead, one message away</h3><p>Talk directly to the person writing your proposal — no account managers, no phone tree.</p></div>
+        <div class="card glass card-pad feat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><h3>Proof it landed on time</h3><p>Submission tracking and confirmation, captured and stored — so you know it's in, not hope it's in.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW -->
+  <section class="sec" id="how">
+    <div class="wrap">
+      <div class="sec-head"><span class="label">How it works</span><h2>From first call to funded.</h2></div>
+      <div class="steps">
+        <div class="step"><div class="sn">01</div><div class="bar"></div><h3>Start an engagement</h3><p>Tell us what you're building. We confirm fit and point you at the right program — with an honest go / no-go.</p></div>
+        <div class="step"><div class="sn">02</div><div class="bar"></div><h3>We build it with you</h3><p>Your lead drafts the narrative, budget, and forms to spec. You review and approve from the portal.</p></div>
+        <div class="step"><div class="sn">03</div><div class="bar"></div><h3>Submit, verified</h3><p>We run the compliance gate, submit through the federal systems, and confirm receipt — often days early.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY / QUOTE -->
+  <section class="sec" id="why">
+    <div class="wrap">
+      <div class="quote">
+        <div class="qm">&ldquo;</div>
+        <p>I taught myself to write and submit my own federal proposal. Keystone is the partner — and the workspace — I wish I'd had.</p>
+        <div class="qa">— Alexander Aguilar, Founder, Keystone</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="sec" style="padding-top:0;">
+    <div class="wrap">
+      <div class="card glass cta-band" style="display:block;">
+        <div class="cg"></div>
+        <h2>Your funding is waiting.</h2>
+        <p>Open your portal and start an engagement. The first conversation is free, and we'll tell you honestly if it's worth pursuing.</p>
+        <div class="hero-cta" style="margin-top:0;">
+          <a href="Keystone Portal.html" class="btn btn-primary btn-lg">Get started<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a href="Keystone Portal.html" class="btn btn-ghost btn-lg">Sign in</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="lfoot">
+  <div class="wrap">
+    <div class="lfoot-in">
+      <div>
+        <a class="lbrand" href="#top"><img class="logo-light" src="../assets/logo-mark.png" alt="" /><img class="logo-dark" src="../assets/logo-mark-dark.png" alt="" /><span class="bn">Keystone</span></a>
+        <p>The advisory and the workspace behind your federal grant.</p>
+      </div>
+      <div class="lfoot-cols">
+        <div class="lfoot-col"><h4>Product</h4><a href="#features">The workspace</a><a href="#how">How it works</a><a href="Keystone Portal.html">Open portal</a></div>
+        <div class="lfoot-col"><h4>Company</h4><a href="#why">Why Keystone</a><a href="Keystone Portal.html">Sign in</a><a href="mailto:hello@keystone.co">Contact</a></div>
+        <div class="lfoot-col"><h4>Get started</h4><a href="Keystone Portal.html">Start an engagement</a><a href="Keystone Portal.html">Book a consultation</a></div>
+      </div>
+    </div>
+    <div class="lfoot-bot"><span>© 2026 Keystone Federal Grant Advisory · Las Vegas, NV</span><span>Operational intelligence for funding</span></div>
+  </div>
+</footer>
+
+</div>
+
+<script>
+  (function(){
+    var KEY="keystone-portal-theme", root=document.documentElement;
+    var saved=localStorage.getItem(KEY)||((window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light");
+    root.setAttribute("data-theme",saved);
+    document.getElementById("themeBtn").addEventListener("click",function(){
+      var n=root.getAttribute("data-theme")==="dark"?"light":"dark";
+      root.setAttribute("data-theme",n); localStorage.setItem(KEY,n);
+    });
+  })();
+</script>
+</body>
+</html>

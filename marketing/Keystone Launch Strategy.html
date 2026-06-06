@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Keystone — Launch &amp; Go-to-Market Strategy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../assets/keystone-base.css" />
+<style>
+  /* ── internal banner ─────────────────────── */
+  .internal-strip{ background:var(--brand); color:var(--on-brand); }
+  .internal-strip .is-in{ max-width:var(--maxw); margin:0 auto; padding:9px 40px; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+  .internal-strip .il{ display:flex; align-items:center; gap:11px; font-family:var(--font-mono); font-size:11px; letter-spacing:0.14em; text-transform:uppercase; }
+  .internal-strip .dot{ width:7px; height:7px; border-radius:50%; background:currentColor; opacity:.9; }
+  .internal-strip a{ font-family:var(--font-mono); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; opacity:.85; display:inline-flex; align-items:center; gap:7px; }
+  .internal-strip a:hover{ opacity:1; }
+  .internal-strip a svg{ width:13px; height:13px; }
+
+  /* ── doc hero ────────────────────────────── */
+  .dhero{ position:relative; padding:84px 0 76px; overflow:hidden; border-bottom:1px solid var(--line); }
+  .dhero-grid{ position:absolute; inset:0; pointer-events:none; background-image:linear-gradient(var(--grid-line) 1px,transparent 1px),linear-gradient(90deg,var(--grid-line) 1px,transparent 1px); background-size:64px 64px; -webkit-mask-image:radial-gradient(ellipse 75% 70% at 30% 0%,#000,transparent 72%); mask-image:radial-gradient(ellipse 75% 70% at 30% 0%,#000,transparent 72%); }
+  .dhero-in{ position:relative; }
+  .dhero .tag{ display:inline-flex; align-items:center; gap:10px; border:1px solid var(--line-strong); border-radius:var(--r-full); padding:6px 15px; font-family:var(--font-mono); font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-2); background:var(--surface); margin-bottom:28px; }
+  .dhero h1{ font-size:clamp(40px,6vw,76px); font-weight:600; line-height:1.0; letter-spacing:-0.035em; margin:0; color:var(--ink); max-width:17ch; text-wrap:balance; }
+  .dhero .lede{ font-size:clamp(17px,1.6vw,21px); font-weight:300; color:var(--ink-2); max-width:60ch; margin:26px 0 0; line-height:1.55; }
+  .dhero-meta{ display:grid; grid-template-columns:repeat(4,auto); gap:0; margin-top:44px; border-top:1px solid var(--line); padding-top:28px; width:fit-content; }
+  .dhero-meta .dm{ padding-right:42px; margin-right:42px; border-right:1px solid var(--line); }
+  .dhero-meta .dm:last-child{ border-right:none; margin-right:0; padding-right:0; }
+  .dhero-meta .dk{ font-family:var(--font-mono); font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--faint); margin-bottom:8px; }
+  .dhero-meta .dv{ font-size:16px; font-weight:500; color:var(--ink); }
+
+  /* ── contents ────────────────────────────── */
+  .toc{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:var(--r-lg); overflow:hidden; }
+  .toc a{ background:var(--bg); padding:22px 24px; display:flex; flex-direction:column; gap:6px; transition:background .2s var(--ease); }
+  .toc a:hover{ background:var(--bg-2); }
+  .toc .tn{ font-family:var(--font-mono); font-size:11px; color:var(--muted); letter-spacing:0.06em; }
+  .toc .tt{ font-size:15px; font-weight:500; color:var(--ink); letter-spacing:-0.01em; }
+
+  /* ── generic ─────────────────────────────── */
+  .lead-num{ font-family:var(--font-mono); font-size:12px; color:var(--ink-2); letter-spacing:0.06em; }
+  .grid-2{ display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
+  .grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .grid-4{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
+
+  .card{ border:1px solid var(--line); border-radius:var(--r-lg); background:var(--surface-glass); padding:28px; box-shadow:var(--shadow-sm); }
+  .card h3{ font-size:18px; font-weight:600; letter-spacing:-0.01em; margin:0 0 9px; color:var(--ink); }
+  .card p{ font-size:14.5px; font-weight:300; color:var(--ink-2); line-height:1.6; margin:0; }
+  .ckicker{ font-family:var(--font-mono); font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); margin-bottom:16px; }
+
+  /* opportunity stats */
+  .opp{ display:grid; grid-template-columns:repeat(4,1fr); border:1px solid var(--line); border-radius:var(--r-lg); overflow:hidden; background:var(--surface-glass); }
+  .opp .o{ padding:32px 28px; border-right:1px solid var(--line); }
+  .opp .o:last-child{ border-right:none; }
+  .opp .ov{ font-size:clamp(30px,3.2vw,42px); font-weight:600; letter-spacing:-0.03em; color:var(--ink); line-height:1; }
+  .opp .ol{ font-size:13px; font-weight:300; color:var(--ink-2); margin-top:12px; line-height:1.45; }
+
+  /* segments */
+  .seg{ border:1px solid var(--line); border-radius:var(--r-lg); background:var(--surface-glass); padding:28px; box-shadow:var(--shadow-sm); display:flex; flex-direction:column; transition:transform .22s var(--ease), border-color .22s var(--ease), box-shadow .22s var(--ease); }
+  .seg:hover{ transform:translateY(-4px); border-color:var(--line-strong); box-shadow:var(--shadow-card); }
+  .seg .pr{ display:inline-flex; align-items:center; gap:7px; font-family:var(--font-mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--on-brand); background:var(--brand); border-radius:var(--r-full); padding:4px 10px; align-self:flex-start; margin-bottom:18px; }
+  .seg .pr.sec{ color:var(--ink-2); background:transparent; border:1px solid var(--line-strong); }
+  .seg h3{ font-size:18px; font-weight:600; letter-spacing:-0.01em; margin:0 0 5px; color:var(--ink); }
+  .seg .who{ font-size:12.5px; color:var(--muted); font-weight:300; margin-bottom:16px; }
+  .seg .pain{ font-size:14px; font-weight:300; color:var(--ink-2); line-height:1.6; margin:0 0 18px; }
+  .seg .meta{ margin-top:auto; padding-top:16px; border-top:1px solid var(--line-soft); display:flex; gap:24px; }
+  .seg .meta .mk{ font-family:var(--font-mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--faint); }
+  .seg .meta .mv{ font-size:14px; font-weight:500; color:var(--ink); margin-top:4px; }
+
+  /* competitive map */
+  .compmap{ border:1px solid var(--line); border-radius:var(--r-lg); overflow:hidden; }
+  .compmap .row{ display:grid; grid-template-columns:1.1fr 1.4fr 1.4fr 0.9fr; gap:0; border-bottom:1px solid var(--line); }
+  .compmap .row:last-child{ border-bottom:none; }
+  .compmap .row.head{ background:var(--bg-2); }
+  .compmap .c{ padding:18px 22px; border-right:1px solid var(--line); font-size:14px; font-weight:300; color:var(--ink-2); line-height:1.5; }
+  .compmap .c:last-child{ border-right:none; }
+  .compmap .row.head .c{ font-family:var(--font-mono); font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); font-weight:500; }
+  .compmap .c.who{ font-weight:600; color:var(--ink); font-size:14.5px; }
+  .compmap .row.us{ background:color-mix(in srgb, var(--brand) 6%, transparent); }
+  .compmap .row.us .c.who{ color:var(--ink); }
+  .compmap .tagm{ display:inline-block; font-family:var(--font-mono); font-size:10px; letter-spacing:0.08em; text-transform:uppercase; padding:3px 9px; border-radius:var(--r-full); border:1px solid var(--line-strong); color:var(--ink-2); }
+
+  /* insight callout */
+  .insight{ border:1px solid var(--line-strong); border-radius:var(--r-lg); background:var(--surface-glass); padding:48px 52px; box-shadow:var(--shadow-card); position:relative; overflow:hidden; }
+  .insight-grid{ position:absolute; inset:0; pointer-events:none; background-image:linear-gradient(var(--grid-line) 1px,transparent 1px),linear-gradient(90deg,var(--grid-line) 1px,transparent 1px); background-size:44px 44px; -webkit-mask-image:radial-gradient(ellipse 60% 100% at 90% 50%,#000,transparent 70%); mask-image:radial-gradient(ellipse 60% 100% at 90% 50%,#000,transparent 70%); }
+  .insight .ik{ position:relative; font-family:var(--font-mono); font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--muted); margin-bottom:20px; }
+  .insight p{ position:relative; font-size:clamp(22px,2.4vw,32px); font-weight:300; line-height:1.4; letter-spacing:-0.02em; color:var(--ink); margin:0; max-width:24ch; text-wrap:balance; }
+  .insight p b{ font-weight:600; }
+
+  /* positioning statement */
+  .posit{ border-left:2px solid var(--brand); padding:6px 0 6px 32px; }
+  .posit p{ font-size:clamp(19px,2vw,25px); font-weight:300; line-height:1.5; letter-spacing:-0.01em; color:var(--ink); margin:0; text-wrap:pretty; }
+  .posit p b{ font-weight:600; }
+
+  /* pillars */
+  .pillar{ border:1px solid var(--line); border-radius:var(--r-lg); background:var(--surface-glass); padding:28px; box-shadow:var(--shadow-sm); }
+  .pillar .pn{ font-family:var(--font-mono); font-size:11px; color:var(--ink-2); letter-spacing:0.06em; margin-bottom:18px; }
+  .pillar h3{ font-size:17px; font-weight:600; letter-spacing:-0.01em; margin:0 0 8px; color:var(--ink); }
+  .pillar p{ font-size:14px; font-weight:300; color:var(--ink-2); line-height:1.55; margin:0; }
+
+  /* channels */
+  .chan{ display:grid; grid-template-columns:auto 1fr auto; gap:24px; align-items:center; padding:22px 0; border-top:1px solid var(--line); }
+  .chan:first-child{ border-top:none; }
+  .chan .ci{ width:42px; height:42px; border-radius:var(--r-md); border:1px solid var(--line-strong); display:flex; align-items:center; justify-content:center; color:var(--ink); background:var(--bg); }
+  .chan .ci svg{ width:20px; height:20px; }
+  .chan .cbody h3{ font-size:16.5px; font-weight:600; letter-spacing:-0.01em; margin:0 0 4px; color:var(--ink); }
+  .chan .cbody p{ font-size:14px; font-weight:300; color:var(--ink-2); line-height:1.5; margin:0; max-width:72ch; }
+  .chan .crole{ font-family:var(--font-mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-2); border:1px solid var(--line-strong); border-radius:var(--r-full); padding:5px 11px; white-space:nowrap; }
+
+  /* timeline */
+  .phase{ display:grid; grid-template-columns:220px 1fr; gap:40px; padding:36px 0; border-top:1px solid var(--line); }
+  .phase:first-child{ border-top:none; }
+  .phase .pleft .pp{ font-family:var(--font-mono); font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); margin-bottom:10px; }
+  .phase .pleft h3{ font-size:24px; font-weight:600; letter-spacing:-0.02em; margin:0 0 8px; color:var(--ink); }
+  .phase .pleft .pwhen{ font-size:13px; font-weight:300; color:var(--ink-2); }
+  .phase .pleft .pbar{ height:3px; border-radius:2px; background:var(--line-strong); margin-top:18px; position:relative; overflow:hidden; }
+  .phase .pleft .pbar::after{ content:""; position:absolute; left:0; top:0; bottom:0; background:var(--brand); }
+  .phase.p1 .pbar::after{ width:33%; }
+  .phase.p2 .pbar::after{ width:66%; }
+  .phase.p3 .pbar::after{ width:100%; }
+  .phase .pright{ display:grid; grid-template-columns:1fr 1fr; gap:14px 28px; align-content:start; }
+  .phase .act{ display:flex; gap:12px; align-items:flex-start; }
+  .phase .act .ck{ width:18px; height:18px; flex-shrink:0; margin-top:2px; border-radius:5px; border:1px solid var(--line-strong); display:flex; align-items:center; justify-content:center; color:var(--ink); }
+  .phase .act .ck svg{ width:11px; height:11px; }
+  .phase .act .at{ font-size:14px; font-weight:300; color:var(--ink-2); line-height:1.5; }
+  .phase .act .at b{ font-weight:600; color:var(--ink); }
+
+  /* ── CREATIVE ────────────────────────────── */
+  .creative-note{ display:flex; align-items:flex-start; gap:14px; background:var(--bg-2); border:1px solid var(--line); border-radius:var(--r-md); padding:18px 22px; margin-bottom:40px; }
+  .creative-note svg{ width:18px; height:18px; color:var(--ink-2); flex-shrink:0; margin-top:1px; }
+  .creative-note p{ margin:0; font-size:13.5px; font-weight:300; color:var(--ink-2); line-height:1.55; }
+
+  .ad-stage{ background:var(--bg-2); border:1px solid var(--line); border-radius:var(--r-lg); padding:28px; display:flex; flex-direction:column; }
+  .ad-cap{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:18px; }
+  .ad-cap .acn{ font-family:var(--font-mono); font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink); }
+  .ad-cap .acf{ font-family:var(--font-mono); font-size:10px; letter-spacing:0.08em; color:var(--muted); border:1px solid var(--line-strong); border-radius:var(--r-full); padding:3px 9px; }
+  .ad-cap-note{ font-size:12.5px; font-weight:300; color:var(--muted); margin:14px 0 0; line-height:1.5; }
+
+  /* the ad canvas — dark, brand-forward key visual */
+  .kv{ border-radius:var(--r-md); overflow:hidden; position:relative; background:#0b0b0d; color:#f4f4f5; border:1px solid rgba(255,255,255,.08); }
+  .kv .kv-grid{ position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px); background-size:40px 40px; -webkit-mask-image:radial-gradient(ellipse 90% 70% at 50% 0%,#000,transparent 78%); mask-image:radial-gradient(ellipse 90% 70% at 50% 0%,#000,transparent 78%); }
+  .kv-inner{ position:relative; padding:34px; height:100%; display:flex; flex-direction:column; }
+  .kv-mark{ display:flex; align-items:center; gap:9px; }
+  .kv-mark img{ height:26px; }
+  .kv-mark .kn{ font-weight:600; font-size:16px; letter-spacing:-0.02em; color:#f4f4f5; }
+  .kv-eyebrow{ font-family:var(--font-mono); font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:#a1a1aa; }
+
+  /* 1.91:1 landscape ad */
+  .kv.landscape{ aspect-ratio:1.91/1; }
+  .kv.landscape .kv-inner{ justify-content:space-between; }
+  .kv.landscape .kvh{ font-size:34px; font-weight:600; line-height:1.04; letter-spacing:-0.03em; max-width:15ch; margin:0; text-wrap:balance; }
+  .kv.landscape .kvh em{ font-style:normal; color:#a1a1aa; }
+  .kv.landscape .kvf{ display:flex; align-items:center; justify-content:space-between; gap:16px; }
+  .kv .pillbtn{ font-family:var(--font-sans); font-size:13px; font-weight:500; color:#0b0b0d; background:#f4f4f5; border-radius:var(--r-full); padding:9px 18px; display:inline-flex; align-items:center; gap:8px; }
+  .kv .pillbtn svg{ width:14px; height:14px; }
+  .kv .ksub{ font-size:13px; font-weight:300; color:#d4d4d8; max-width:34ch; }
+
+  /* square ad */
+  .kv.square{ aspect-ratio:1/1; }
+  .kv.square .kv-inner{ justify-content:space-between; }
+  .kv.square .kvh{ font-size:30px; font-weight:600; line-height:1.06; letter-spacing:-0.03em; margin:0; text-wrap:balance; }
+  .kv.square .statline{ display:flex; gap:22px; margin-top:14px; }
+  .kv.square .statline .s .sv{ font-size:26px; font-weight:600; letter-spacing:-0.02em; color:#f4f4f5; }
+  .kv.square .statline .s .sl{ font-size:10.5px; font-weight:300; color:#a1a1aa; margin-top:4px; line-height:1.3; }
+
+  /* vertical / story ad */
+  .kv.vertical{ aspect-ratio:9/16; }
+  .kv.vertical .kv-inner{ justify-content:space-between; }
+  .kv.vertical .kvh{ font-size:30px; font-weight:600; line-height:1.05; letter-spacing:-0.03em; margin:0; text-wrap:balance; }
+  .kv.vertical .kvh em{ font-style:normal; color:#a1a1aa; }
+  .kv.vertical .kbadge{ align-self:flex-start; font-family:var(--font-mono); font-size:9.5px; letter-spacing:0.12em; text-transform:uppercase; color:#0b0b0d; background:#f4f4f5; border-radius:var(--r-full); padding:5px 11px; }
+
+  /* light variant ad */
+  .kv.lightad{ background:#fcfcfa; color:#17181c; border:1px solid #e7e7e1; }
+  .kv.lightad .kv-grid{ background-image:linear-gradient(rgba(20,20,25,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(20,20,25,.05) 1px,transparent 1px); }
+  .kv.lightad .kn{ color:#17181c; }
+  .kv.lightad .kv-eyebrow{ color:#7c7f87; }
+  .kv.lightad .kvh em{ color:#7c7f87; }
+  .kv.lightad .pillbtn{ color:#fcfcfa; background:#1b1c20; }
+  .kv.lightad .ksub{ color:#3e4047; }
+  .kv.lightad .statline .s .sv{ color:#17181c; }
+  .kv.lightad .statline .s .sl{ color:#7c7f87; }
+
+  /* ── STORYBOARD ──────────────────────────── */
+  .board{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .frame .scr{ aspect-ratio:16/9; border-radius:var(--r-md); overflow:hidden; position:relative; background:#0b0b0d; color:#f4f4f5; border:1px solid rgba(255,255,255,.08); display:flex; align-items:center; justify-content:center; padding:26px; text-align:center; }
+  .frame .scr .fgrid{ position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px); background-size:34px 34px; }
+  .frame .scr .fnum{ position:absolute; top:12px; left:14px; font-family:var(--font-mono); font-size:11px; color:#a1a1aa; letter-spacing:0.06em; }
+  .frame .scr .ftime{ position:absolute; top:12px; right:14px; font-family:var(--font-mono); font-size:11px; color:#71717a; }
+  .frame .scr .fvis{ position:relative; }
+  .frame .scr .fvis .fmark{ height:34px; opacity:.95; margin:0 auto 14px; display:block; }
+  .frame .scr .fvis .fcopy{ font-size:19px; font-weight:600; letter-spacing:-0.02em; line-height:1.15; }
+  .frame .scr .fvis .fcopy.lg{ font-size:24px; }
+  .frame .scr .fvis .fsmall{ font-family:var(--font-mono); font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:#a1a1aa; }
+  .frame .scr .fvis .fnums{ display:flex; gap:18px; justify-content:center; }
+  .frame .scr .fvis .fnums .fv{ font-size:26px; font-weight:600; letter-spacing:-0.02em; }
+  .frame .meta{ padding:16px 4px 0; }
+  .frame .meta .fl{ font-family:var(--font-mono); font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin-bottom:7px; }
+  .frame .meta p{ font-size:13.5px; font-weight:300; color:var(--ink-2); line-height:1.5; margin:0; }
+  .frame .meta p b{ font-weight:600; color:var(--ink); }
+
+  .vo{ border:1px solid var(--line); border-radius:var(--r-lg); background:var(--surface-glass); padding:28px 32px; margin-top:24px; display:grid; grid-template-columns:auto 1fr; gap:24px; align-items:center; }
+  .vo .vk{ font-family:var(--font-mono); font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); white-space:nowrap; }
+  .vo p{ margin:0; font-size:16px; font-weight:300; font-style:italic; color:var(--ink); line-height:1.55; }
+
+  /* ── NEWS / PR ───────────────────────────── */
+  .news-head{ border:1px solid var(--line); border-radius:var(--r-lg); background:var(--surface-glass); padding:26px 28px; box-shadow:var(--shadow-sm); transition:transform .22s var(--ease), border-color .22s var(--ease), box-shadow .22s var(--ease); }
+  .news-head:hover{ transform:translateY(-3px); border-color:var(--line-strong); box-shadow:var(--shadow-card); }
+  .news-head .src{ font-family:var(--font-mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+  .news-head .src .d{ width:5px; height:5px; border-radius:50%; background:var(--wedge); }
+  .news-head h3{ font-size:19px; font-weight:600; letter-spacing:-0.02em; line-height:1.2; margin:0; color:var(--ink); text-wrap:balance; }
+  .news-head p{ font-size:13.5px; font-weight:300; color:var(--ink-2); margin:12px 0 0; line-height:1.55; }
+
+  .angle{ display:grid; grid-template-columns:auto 1fr; gap:18px; padding:20px 0; border-top:1px solid var(--line); }
+  .angle:first-child{ border-top:none; }
+  .angle .an{ font-family:var(--font-mono); font-size:12px; color:var(--ink-2); padding-top:2px; }
+  .angle h4{ font-size:16px; font-weight:600; letter-spacing:-0.01em; margin:0 0 5px; color:var(--ink); }
+  .angle p{ font-size:14px; font-weight:300; color:var(--ink-2); margin:0; line-height:1.55; }
+  .angle .outlets{ display:flex; flex-wrap:wrap; gap:7px; margin-top:12px; }
+  .angle .outlets span{ font-family:var(--font-mono); font-size:10px; letter-spacing:0.04em; color:var(--muted); border:1px solid var(--line-strong); border-radius:var(--r-full); padding:3px 9px; }
+
+  /* ── KPIs ────────────────────────────────── */
+  .kpi{ border:1px solid var(--line); border-radius:var(--r-lg); background:var(--surface-glass); padding:26px; box-shadow:var(--shadow-sm); }
+  .kpi .kph{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin-bottom:14px; }
+  .kpi .kpn{ font-size:14px; font-weight:600; color:var(--ink); }
+  .kpi .kpt{ font-family:var(--font-mono); font-size:11px; color:var(--ink-2); }
+  .kpi .kpd{ font-size:13px; font-weight:300; color:var(--muted); line-height:1.5; margin:0; }
+  .kpi .kpbar{ height:6px; border-radius:3px; background:var(--bg-3); margin:16px 0 0; overflow:hidden; }
+  .kpi .kpbar i{ display:block; height:100%; background:var(--brand); border-radius:3px; }
+
+  @media (max-width:980px){
+    .internal-strip .is-in{ padding-left:22px; padding-right:22px; }
+    .toc,.grid-3,.grid-4,.opp,.board,.phase .pright{ grid-template-columns:1fr 1fr; }
+    .dhero-meta{ grid-template-columns:1fr 1fr; gap:20px; width:auto; }
+    .dhero-meta .dm{ border-right:none; margin-right:0; padding-right:0; }
+    .phase{ grid-template-columns:1fr; gap:20px; }
+    .compmap .row{ grid-template-columns:1fr; }
+    .compmap .c{ border-right:none; border-bottom:1px solid var(--line); }
+  }
+  @media (max-width:680px){
+    .toc,.grid-2,.grid-3,.grid-4,.opp,.board,.phase .pright{ grid-template-columns:1fr; }
+    .opp .o{ border-right:none; border-bottom:1px solid var(--line); }
+    .vo{ grid-template-columns:1fr; gap:12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="internal-strip">
+  <div class="is-in">
+    <div class="il"><span class="dot"></span> Internal · Go-to-Market Working Document</div>
+    <a href="../Keystone.html">View the live site
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+    </a>
+  </div>
+</div>
+
+<nav class="bar">
+  <div class="bar-in">
+    <a class="brand-lock" href="../Keystone.html" aria-label="Keystone home">
+      <img class="logo-light" src="../assets/logo-mark.png" alt="Keystone" />
+      <img class="logo-dark" src="../assets/logo-mark-dark.png" alt="Keystone" />
+      <span class="bn">Keystone</span>
+    </a>
+    <div class="navlinks">
+      <div class="navdrop">
+        <button class="navdrop-t" aria-haspopup="true">Services <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button>
+        <div class="navdrop-menu" role="menu">
+          <div class="mlabel">The six services</div>
+          <a href="../services/opportunity-eligibility.html"><span>Opportunity &amp; eligibility</span><span class="mc">01</span></a>
+          <a href="../services/proposal-development.html"><span>Proposal development</span><span class="mc">02</span></a>
+          <a href="../services/compliance-review.html"><span>Compliance review</span><span class="mc">03</span></a>
+          <a href="../services/capture-strategy.html"><span>Capture &amp; strategy</span><span class="mc">04</span></a>
+          <a href="../services/submission-systems.html"><span>Submission &amp; systems</span><span class="mc">05</span></a>
+          <a href="../services/debrief-resubmission.html"><span>Debrief &amp; resubmission</span><span class="mc">06</span></a>
+        </div>
+      </div>
+      <a href="../Keystone.html#process">Process</a>
+      <a href="../Keystone.html#work">Engagements</a>
+      <a href="../Keystone.html#about">About</a>
+    </div>
+    <div class="nav-right">
+      <div class="navdrop internal">
+        <button class="navdrop-t alt" aria-haspopup="true">Internal <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button>
+        <div class="navdrop-menu right" role="menu">
+          <div class="mlabel">Working documents</div>
+          <a class="cur" href="Keystone Launch Strategy.html"><span>Launch strategy</span><span class="mc">GTM</span></a>
+          <a href="Keystone Launch Film.html"><span>Launch film</span><span class="mc">0:30</span></a>
+        </div>
+      </div>
+      <button class="ttoggle" id="themeBtn" aria-label="Toggle theme">
+        <svg class="tt-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        <svg class="tt-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
+      </button>
+      <a href="../Keystone.html#contact" class="btn btn-primary">Book a consultation</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <!-- HERO -->
+  <section class="dhero">
+    <div class="dhero-grid"></div>
+    <div class="wrap dhero-in">
+      <div class="tag">Launch Plan · v1 · June 2026</div>
+      <h1>Putting Keystone on the map.</h1>
+      <p class="lede">A market study and go-to-market plan to launch a federal grant advisory — who we win first, the story that moves them, the channels that reach them, and the creative to make it land.</p>
+      <div class="dhero-meta">
+        <div class="dm"><div class="dk">Objective</div><div class="dv">First 10 clients</div></div>
+        <div class="dm"><div class="dk">Beachhead</div><div class="dv">SBIR first-timers</div></div>
+        <div class="dm"><div class="dk">Horizon</div><div class="dv">90-day launch</div></div>
+        <div class="dm"><div class="dk">Edge</div><div class="dv">Founder-built proof</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOC -->
+  <section class="band" style="padding:56px 0;">
+    <div class="wrap">
+      <div class="toc">
+        <a href="#market"><span class="tn">01</span><span class="tt">Market study</span></a>
+        <a href="#position"><span class="tn">02</span><span class="tt">Positioning &amp; message</span></a>
+        <a href="#gtm"><span class="tn">03</span><span class="tt">Go-to-market</span></a>
+        <a href="#timeline"><span class="tn">04</span><span class="tt">90-day launch</span></a>
+        <a href="#creative"><span class="tn">05</span><span class="tt">Ad key visuals</span></a>
+        <a href="#film"><span class="tn">06</span><span class="tt">Launch film</span></a>
+        <a href="#news"><span class="tn">07</span><span class="tt">News &amp; PR</span></a>
+        <a href="#metrics"><span class="tn">08</span><span class="tt">What we measure</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 01 MARKET -->
+  <section class="band" id="market">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">01 · Market study</span><h2>A large, procedural market with an underserved middle.</h2><p>Federal money is abundant and the process is notoriously hard. Most help is either too cheap to trust or too expensive to reach — which is exactly where Keystone enters.</p></div>
+
+      <div class="opp" style="margin-bottom:56px;">
+        <div class="o"><div class="ov">$1.2T+</div><div class="ol">Awarded in federal assistance each year</div></div>
+        <div class="o"><div class="ov">$4.5B</div><div class="ol">Set aside annually for SBIR / STTR alone</div></div>
+        <div class="o"><div class="ov">2,400+</div><div class="ol">Active grant &amp; assistance programs to triage</div></div>
+        <div class="o"><div class="ov">26</div><div class="ol">Grant-making federal agencies, each with its own rules</div></div>
+      </div>
+
+      <div class="ckicker">Who we serve — four segments, ranked by launch priority</div>
+      <div class="grid-4" style="margin-bottom:56px;">
+        <div class="seg">
+          <span class="pr">Beachhead</span>
+          <h3>Deep-tech founders</h3>
+          <div class="who">First-time SBIR / STTR applicants</div>
+          <p class="pain">Strong technology, zero proposal experience, and a deadline. They feel the pain most and decide fast.</p>
+          <div class="meta"><div><div class="mk">Agencies</div><div class="mv">DoD · NSF · DOE</div></div></div>
+        </div>
+        <div class="seg">
+          <span class="pr sec">Priority 2</span>
+          <h3>Research institutions</h3>
+          <div class="who">PIs &amp; small labs</div>
+          <p class="pain">Excellent science, thin on grant-writing bandwidth — especially for resubmissions after a near-miss.</p>
+          <div class="meta"><div><div class="mk">Agencies</div><div class="mv">NIH · NSF</div></div></div>
+        </div>
+        <div class="seg">
+          <span class="pr sec">Priority 3</span>
+          <h3>Nonprofits &amp; FQHCs</h3>
+          <div class="who">Mission-driven orgs</div>
+          <p class="pain">Compelling programs, but stalled by federal systems and compliance they've never had to navigate.</p>
+          <div class="meta"><div><div class="mk">Agencies</div><div class="mv">HHS · HRSA · USDA</div></div></div>
+        </div>
+        <div class="seg">
+          <span class="pr sec">Expansion</span>
+          <h3>Established firms</h3>
+          <div class="who">Bidding on contracts</div>
+          <p class="pain">Capacity exists in-house, but they want a capture partner to sharpen win rates over multiple cycles.</p>
+          <div class="meta"><div><div class="mk">Model</div><div class="mv">Retainer</div></div></div>
+        </div>
+      </div>
+
+      <div class="ckicker">Competitive landscape — where the white space is</div>
+      <div class="compmap" style="margin-bottom:56px;">
+        <div class="row head">
+          <div class="c">Who</div>
+          <div class="c">What they offer</div>
+          <div class="c">Where they fall short</div>
+          <div class="c">Price</div>
+        </div>
+        <div class="row">
+          <div class="c who">Freelance writers</div>
+          <div class="c">Per-proposal writing, found on marketplaces</div>
+          <div class="c">Inconsistent quality, no strategy or compliance rigor, no continuity</div>
+          <div class="c"><span class="tagm">$ Low</span></div>
+        </div>
+        <div class="row">
+          <div class="c who">Big consultancies</div>
+          <div class="c">Full capture for large federal contracts</div>
+          <div class="c">Enterprise-only, slow, priced out of reach for startups &amp; small orgs</div>
+          <div class="c"><span class="tagm">$$$ High</span></div>
+        </div>
+        <div class="row">
+          <div class="c who">Discovery software</div>
+          <div class="c">Databases that surface matching opportunities</div>
+          <div class="c">Find the grant but don't write or submit it — the hard part is still yours</div>
+          <div class="c"><span class="tagm">$ SaaS</span></div>
+        </div>
+        <div class="row">
+          <div class="c who">University grant offices</div>
+          <div class="c">Internal administrative support for PIs</div>
+          <div class="c">Compliance &amp; submission only; rarely strengthen the proposal itself</div>
+          <div class="c"><span class="tagm">Internal</span></div>
+        </div>
+        <div class="row us">
+          <div class="c who">Keystone</div>
+          <div class="c">Full-cycle advisory — strategy, writing, compliance, submission</div>
+          <div class="c">The whole job, done to spec, accessible to first-timers &amp; small teams</div>
+          <div class="c"><span class="tagm">$$ Mid</span></div>
+        </div>
+      </div>
+
+      <div class="insight">
+        <div class="insight-grid"></div>
+        <div class="ik">The insight we build on</div>
+        <p>Most strong applicants lose on <b>compliance, not merit</b> — and the best proof we can offer is a founder who <b>navigated it himself.</b></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 POSITIONING -->
+  <section class="band" id="position">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">02 · Positioning &amp; message</span><h2>One sentence that says exactly who we're for.</h2></div>
+
+      <div class="posit" style="margin-bottom:56px;">
+        <p>For <b>organizations doing fundable work</b> who lack the time and federal fluency to win grants alone, <b>Keystone</b> is the advisory that runs the entire proposal lifecycle to the agency's exact spec — unlike freelancers or enterprise consultancies, because it's <b>founder-built by someone who has done it</b>, compliance-first, and within reach of first-time applicants.</p>
+      </div>
+
+      <div class="ckicker">Four message pillars</div>
+      <div class="grid-4" style="margin-bottom:56px;">
+        <div class="pillar"><div class="pn">Pillar 01</div><h3>We've sat where you sit</h3><p>Founder-built credibility. Keystone was started by someone who wrote and submitted his own federal proposal — the authenticity competitors can't claim.</p></div>
+        <div class="pillar"><div class="pn">Pillar 02</div><h3>Win on merit, not technicalities</h3><p>The compliance-first promise. We make sure a format slip or missing form never costs you an award you earned.</p></div>
+        <div class="pillar"><div class="pn">Pillar 03</div><h3>Idea to award, one partner</h3><p>Full-cycle, not piecemeal. From the right solicitation to a verified submission — no handoffs, no gaps.</p></div>
+        <div class="pillar"><div class="pn">Pillar 04</div><h3>Built for first-timers</h3><p>Accessible expertise. The rigor of a big consultancy, scaled and priced for startups, labs, and small orgs.</p></div>
+      </div>
+
+      <div class="ckicker">Tagline system</div>
+      <div class="grid-3">
+        <div class="card"><div class="ckicker">Lead</div><h3>Funding favors the well-prepared.</h3><p>The primary line — already live on the site. Calm, confident, true.</p></div>
+        <div class="card"><div class="ckicker">Founder-led</div><h3>We've been on your side of the form.</h3><p>For founder-story and origin creative. Leans into the authenticity edge.</p></div>
+        <div class="card"><div class="ckicker">Proof-led</div><h3>The piece that holds the application together.</h3><p>The keystone metaphor — for brand and out-of-home where the mark does the talking.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 GTM -->
+  <section class="band" id="gtm">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">03 · Go-to-market</span><h2>Reach the beachhead where they already are.</h2><p>First-time applicants cluster in known places — accelerators, SBDCs, LinkedIn, and the moment they register on SAM.gov. We meet them there with education first, pitch second.</p></div>
+
+      <div class="ckicker">Content pillars — earn trust before asking for it</div>
+      <div class="grid-4" style="margin-bottom:56px;">
+        <div class="pillar"><div class="pn">Educate</div><h3>How federal grants actually work</h3><p>Plain-language guides: "SBIR in 10 minutes," solicitation breakdowns, the compliance traps that sink applications.</p></div>
+        <div class="pillar"><div class="pn">Prove</div><h3>Case studies &amp; outcomes</h3><p>The representative engagements, made concrete — what changed, and why it mattered.</p></div>
+        <div class="pillar"><div class="pn">Alert</div><h3>Open-opportunity radar</h3><p>A recurring digest of newly-posted solicitations by sector — the reason to subscribe and stay.</p></div>
+        <div class="pillar"><div class="pn">Founder POV</div><h3>Notes from the inside</h3><p>The founder's firsthand take on navigating the federal system — the human thread through everything.</p></div>
+      </div>
+
+      <div class="ckicker">Channels &amp; their job</div>
+      <div>
+        <div class="chan">
+          <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"></rect><path d="M2 9h20M7 4v5"></path></svg></div>
+          <div class="cbody"><h3>Founder-led LinkedIn</h3><p>The primary launch engine. Firsthand stories, grant breakdowns, and the build-in-public origin of Keystone — where the beachhead audience and referrers actually pay attention.</p></div>
+          <span class="crole">Awareness</span>
+        </div>
+        <div class="chan">
+          <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg></div>
+          <div class="cbody"><h3>Content &amp; SEO</h3><p>Evergreen guides that rank for "how to write an SBIR proposal" and similar intent searches — compounding inbound that works while you sleep.</p></div>
+          <span class="crole">Inbound</span>
+        </div>
+        <div class="chan">
+          <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
+          <div class="cbody"><h3>Partnerships</h3><p>Co-marketing with incubators, accelerators, university tech-transfer offices, and SBDCs — they have the founders; we have the expertise they can't staff.</p></div>
+          <span class="crole">Distribution</span>
+        </div>
+        <div class="chan">
+          <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5V7z"></path><rect x="1" y="5" width="15" height="14" rx="2"></rect></svg></div>
+          <div class="cbody"><h3>Workshops &amp; webinars</h3><p>"SBIR 101" sessions hosted with partners — live proof of expertise that converts attendees into consultations.</p></div>
+          <span class="crole">Conversion</span>
+        </div>
+        <div class="chan">
+          <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"></path><path d="M22 6l-10 7L2 6"></path></svg></div>
+          <div class="cbody"><h3>The Opportunity Radar newsletter</h3><p>A sector-segmented digest of open solicitations and deadlines — the owned channel that keeps Keystone top-of-mind until the buying moment arrives.</p></div>
+          <span class="crole">Nurture</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 TIMELINE -->
+  <section class="band" id="timeline">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">04 · 90-day launch</span><h2>Three phases from quiet to loud.</h2></div>
+      <div>
+        <div class="phase p1">
+          <div class="pleft"><div class="pp">Phase 01</div><h3>Foundation</h3><div class="pwhen">Weeks −4 to 0 · before launch</div><div class="pbar"></div></div>
+          <div class="pright">
+            <div class="act"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span><span class="at"><b>Site &amp; brand live</b> — the charcoal identity, six service pages, founder story.</span></div>
+            <div class="act"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span><span class="at"><b>Seed content</b> — 3–4 cornerstone guides published and indexable.</span></div>
+            <div class="act"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span><span class="at"><b>Warm the founder's LinkedIn</b> — begin posting the build-in-public origin.</span></div>
+            <div class="act"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span><span class="at"><b>Line up 2–3 partners</b> for launch-week workshops.</span></div>
+          </div>
+        </div>
+        <div class="phase p2">
+          <div class="pleft"><div class="pp">Phase 02</div><h3>Launch</h3><div class="pwhen">Weeks 1 to 4 · the moment</div><div class="pbar"></div></div>
+          <div class="pright">
+            <div class="act"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span><span class="at"><b>Announcement</b> — founder-story post, launch film, press outreach in one wave.</span></div>
+            <div class="act"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span><span class="at"><b>First "SBIR 101" webinar</b> with a partner audience.</span></div>
+            <div class="act"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span><span class="at"><b>Free readiness check</b> — a low-friction offer to fill the consultation calendar.</span></div>
+            <div class="act"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span><span class="at"><b>Launch the Opportunity Radar</b> and start the subscriber list.</span></div>
+          </div>
+        </div>
+        <div class="phase p3">
+          <div class="pleft"><div class="pp">Phase 03</div><h3>Momentum</h3><div class="pwhen">Months 2 to 6 · compounding</div><div class="pbar"></div></div>
+          <div class="pright">
+            <div class="act"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span><span class="at"><b>Publish real case studies</b> as first engagements close.</span></div>
+            <div class="act"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span><span class="at"><b>Formalize partner referrals</b> into a repeatable channel.</span></div>
+            <div class="act"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span><span class="at"><b>Test paid search</b> against the highest-intent keywords.</span></div>
+            <div class="act"><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span><span class="at"><b>Double down</b> on whichever channel produced the best clients.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 CREATIVE -->
+  <section class="band" id="creative">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">05 · Ad key visuals</span><h2>Strong, type-led creative — in the brand.</h2><p>Charcoal, restraint, the keystone mark. The same discipline that signals trust on the site carries into every placement. Concept directions below, ready for production.</p></div>
+
+      <div class="creative-note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4M12 8h.01"></path></svg>
+        <p>These are live, on-brand concept mockups — not screenshots. Each is built to its real placement aspect ratio (LinkedIn 1.91:1, social 1:1, story 9:16) so they can be handed to production as-is.</p>
+      </div>
+
+      <div class="grid-2" style="margin-bottom:20px;">
+        <div class="ad-stage">
+          <div class="ad-cap"><span class="acn">LinkedIn · Single image</span><span class="acf">1.91 : 1</span></div>
+          <div class="kv landscape">
+            <div class="kv-grid"></div>
+            <div class="kv-inner">
+              <div class="kv-mark"><img class="logo-dark" src="../assets/logo-mark-dark.png" alt="" /><span class="kn">Keystone</span></div>
+              <h3 class="kvh">Funding favors the <em>well-prepared.</em></h3>
+              <div class="kvf">
+                <span class="ksub">Federal grant strategy &amp; proposals — idea to award, one partner.</span>
+                <span class="pillbtn">Book a consultation <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+              </div>
+            </div>
+          </div>
+          <p class="ad-cap-note">Primary awareness unit. Runs against deep-tech founder &amp; PI audiences.</p>
+        </div>
+
+        <div class="ad-stage">
+          <div class="ad-cap"><span class="acn">Instagram / LinkedIn · Square</span><span class="acf">1 : 1</span></div>
+          <div class="kv square">
+            <div class="kv-grid"></div>
+            <div class="kv-inner">
+              <div class="kv-mark"><img class="logo-dark" src="../assets/logo-mark-dark.png" alt="" /><span class="kn">Keystone</span></div>
+              <div>
+                <span class="kv-eyebrow">The compliance gap</span>
+                <h3 class="kvh" style="margin-top:14px;">Most strong proposals lose on a technicality.</h3>
+                <div class="statline">
+                  <div class="s"><div class="sv">~25%</div><div class="sl">Returned without review</div></div>
+                  <div class="s"><div class="sv">0</div><div class="sl">Of them on merit</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="ad-cap-note">Data-led "stat" unit. Stops the scroll, opens the problem.</p>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="ad-stage">
+          <div class="ad-cap"><span class="acn">Story / Reel cover</span><span class="acf">9 : 16</span></div>
+          <div class="kv vertical">
+            <div class="kv-grid"></div>
+            <div class="kv-inner">
+              <span class="kbadge">Founder story</span>
+              <div>
+                <h3 class="kvh">I wrote my own federal proposal. <em>So you don't have to learn it the hard way.</em></h3>
+              </div>
+              <div class="kv-mark"><img class="logo-dark" src="../assets/logo-mark-dark.png" alt="" /><span class="kn">Keystone</span></div>
+            </div>
+          </div>
+          <p class="ad-cap-note">Vertical founder-story cover for Reels &amp; Stories.</p>
+        </div>
+
+        <div class="ad-stage">
+          <div class="ad-cap"><span class="acn">Out-of-home · Light</span><span class="acf">1 : 1</span></div>
+          <div class="kv square lightad">
+            <div class="kv-grid"></div>
+            <div class="kv-inner">
+              <div class="kv-mark"><img class="logo-light" src="../assets/logo-mark.png" alt="" /><span class="kn">Keystone</span></div>
+              <div>
+                <span class="kv-eyebrow">Federal grant advisory</span>
+                <h3 class="kvh" style="margin-top:14px;">The piece that holds the application together.</h3>
+              </div>
+              <span class="pillbtn">keystone.co</span>
+            </div>
+          </div>
+          <p class="ad-cap-note">Light, brand-forward OOH — e.g. Las Vegas, accelerator spaces.</p>
+        </div>
+
+        <div class="ad-stage">
+          <div class="ad-cap"><span class="acn">Email · Announcement</span><span class="acf">1 : 1</span></div>
+          <div class="kv square">
+            <div class="kv-grid"></div>
+            <div class="kv-inner">
+              <div class="kv-mark"><img class="logo-dark" src="../assets/logo-mark-dark.png" alt="" /><span class="kn">Keystone</span></div>
+              <div>
+                <span class="kv-eyebrow">Now open</span>
+                <h3 class="kvh" style="margin-top:14px;">A grant partner that's done it firsthand.</h3>
+                <span class="ksub" style="display:block;margin-top:14px;">Introducing Keystone — and a free grant-readiness check.</span>
+              </div>
+              <span class="pillbtn">Claim your readiness check <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+            </div>
+          </div>
+          <p class="ad-cap-note">Launch-day email hero with the lead conversion offer.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 FILM -->
+  <section class="band" id="film">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">06 · Launch film</span><h2>A 30-second story: every structure needs a keystone.</h2><p>A calm, confident origin film for the launch wave — runs as the LinkedIn announcement, the site hero loop, and a cut-down for Reels. <b style="color:var(--ink);font-weight:600;">The animated film is built — play it below.</b> Storyboard follows; copy is final-draft.</p></div>
+
+      <style>
+        .film-cta{ display:flex; align-items:center; justify-content:space-between; gap:28px; border:1px solid var(--line-strong); border-radius:var(--r-lg); overflow:hidden; background:#0b0b0d; color:#f4f4f5; padding:30px 34px; margin-bottom:40px; position:relative; box-shadow:var(--shadow-card); }
+        .film-cta .fcg{ position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px); background-size:38px 38px; -webkit-mask-image:radial-gradient(ellipse 70% 120% at 12% 50%,#000,transparent 75%); mask-image:radial-gradient(ellipse 70% 120% at 12% 50%,#000,transparent 75%); }
+        .film-cta .fc-l{ position:relative; display:flex; align-items:center; gap:22px; }
+        .film-cta .play{ width:58px; height:58px; border-radius:50%; background:#f4f4f5; color:#0b0b0d; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:transform .2s var(--ease); }
+        .film-cta:hover .play{ transform:scale(1.08); }
+        .film-cta .play svg{ width:22px; height:22px; margin-left:3px; }
+        .film-cta .fc-k{ font-family:var(--font-mono); font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase; color:#a1a1aa; margin-bottom:7px; }
+        .film-cta h3{ font-size:21px; font-weight:600; letter-spacing:-0.02em; margin:0; color:#f4f4f5; }
+        .film-cta .fc-meta{ position:relative; font-family:var(--font-mono); font-size:11px; letter-spacing:0.08em; color:#71717a; white-space:nowrap; }
+        @media (max-width:680px){ .film-cta{ flex-direction:column; align-items:flex-start; gap:18px; } }
+      </style>
+      <a class="film-cta" href="Keystone Launch Film.html">
+        <span class="fcg"></span>
+        <span class="fc-l">
+          <span class="play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 3l16 9-16 9V3z"></path></svg></span>
+          <span><span class="fc-k">Watch · 0:30 · with scrubber</span><h3>Play the animated launch film</h3></span>
+        </span>
+        <span class="fc-meta">1920×1080 · 6 scenes →</span>
+      </a>
+
+      <div class="board">
+        <div class="frame">
+          <div class="scr"><div class="fgrid"></div><span class="fnum">01</span><span class="ftime">0:00–0:05</span><div class="fvis"><div class="fsmall">Black · type fades up</div><div class="fcopy lg" style="margin-top:12px;">$1.2 trillion in federal funding.</div></div></div>
+          <div class="meta"><div class="fl">Open · the stakes</div><p>Stark white type on black. A number too big to ignore. <b>VO begins.</b></p></div>
+        </div>
+        <div class="frame">
+          <div class="scr"><div class="fgrid"></div><span class="fnum">02</span><span class="ftime">0:05–0:10</span><div class="fvis"><div class="fcopy">Most of it goes to whoever<br/>files the proposal best.</div></div></div>
+          <div class="meta"><div class="fl">Turn · the problem</div><p>Type rewrites itself line by line. The system is procedural, not fair.</p></div>
+        </div>
+        <div class="frame">
+          <div class="scr"><div class="fgrid"></div><span class="fnum">03</span><span class="ftime">0:10–0:15</span><div class="fvis"><div class="fsmall">Cut to: laptop glow, night</div><div class="fcopy" style="margin-top:12px;">So I learned to file it.</div></div></div>
+          <div class="meta"><div class="fl">Founder · the proof</div><p>A real beat — the founder at work, late. Optional live footage drops in here.</p></div>
+        </div>
+        <div class="frame">
+          <div class="scr"><div class="fgrid"></div><span class="fnum">04</span><span class="ftime">0:15–0:21</span><div class="fvis"><div class="fnums"><div class="fv">SAM.gov</div><div class="fv">CSO</div><div class="fv">Phase I</div></div><div class="fsmall" style="margin-top:14px;">terms resolve into focus</div></div></div>
+          <div class="meta"><div class="fl">Build · the receipts</div><p>The acronyms that scare applicants snap into clarity, one by one.</p></div>
+        </div>
+        <div class="frame">
+          <div class="scr"><div class="fgrid"></div><span class="fnum">05</span><span class="ftime">0:21–0:26</span><div class="fvis"><img class="fmark logo-dark" src="../assets/logo-mark-dark.png" alt="" /><div class="fsmall">the wedge locks in</div></div></div>
+          <div class="meta"><div class="fl">Brand · the metaphor</div><p>The keystone mark animates into place — the piece that lets the arch stand.</p></div>
+        </div>
+        <div class="frame">
+          <div class="scr"><div class="fgrid"></div><span class="fnum">06</span><span class="ftime">0:26–0:30</span><div class="fvis"><div class="fcopy lg">Funding favors the<br/>well-prepared.</div><div class="fsmall" style="margin-top:14px;">Keystone · keystone.co</div></div></div>
+          <div class="meta"><div class="fl">Close · the line</div><p>Tagline, wordmark, URL. Calm hold. <b>End card → consultation CTA.</b></p></div>
+        </div>
+      </div>
+
+      <div class="vo">
+        <span class="vk">Voiceover · full script</span>
+        <p>"There's more than a trillion dollars in federal funding — and most of it goes to whoever files the proposal best. So I learned to file it myself: the registrations, the solicitation, the whole thing. Now I do it for you. Keystone. Funding favors the well-prepared."</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 NEWS -->
+  <section class="band" id="news">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">07 · News &amp; PR</span><h2>The exciting news — and how it travels.</h2><p>A new firm earns attention with a story, not a press release. The founder's path is the hook; the launch and the free tool are the news pegs.</p></div>
+
+      <div class="ckicker">Announcement headlines — pick the strongest, A/B the rest</div>
+      <div class="grid-3" style="margin-bottom:56px;">
+        <div class="news-head"><div class="src"><span class="d"></span> Founder angle</div><h3>The builder who decoded the federal grant system — and turned it into a firm.</h3><p>Leads with authenticity. Best for LinkedIn, founder communities, and podcasts.</p></div>
+        <div class="news-head"><div class="src"><span class="d"></span> Launch angle</div><h3>Keystone launches to help startups and labs win federal funding they'd otherwise lose.</h3><p>Clean, factual launch news. Best for trade press and partner channels.</p></div>
+        <div class="news-head"><div class="src"><span class="d"></span> Hook angle</div><h3>Free grant-readiness check launches for first-time SBIR applicants.</h3><p>A genuine news peg with a reason to act now. Best for newsletters and communities.</p></div>
+      </div>
+
+      <div class="ckicker">PR angles &amp; where to place them</div>
+      <div style="margin-bottom:0;">
+        <div class="angle">
+          <div class="an">A</div>
+          <div><h4>The firsthand origin story</h4><p>Founder built an AI logistics platform, navigated the federal proposal process solo, and started Keystone so others don't have to. The most ownable, most human angle.</p><div class="outlets"><span>LinkedIn</span><span>Founder podcasts</span><span>Local startup press</span></div></div>
+        </div>
+        <div class="angle">
+          <div class="an">B</div>
+          <div><h4>The "compliance gap" data story</h4><p>A thought-leadership piece on how many strong proposals are lost to avoidable technicalities — positioning Keystone as the fix. Earns links and credibility.</p><div class="outlets"><span>GovCon trade</span><span>Guest columns</span><span>SEO cornerstone</span></div></div>
+        </div>
+        <div class="angle">
+          <div class="an">C</div>
+          <div><h4>The free tool launch</h4><p>A grant-readiness check given away at launch — a concrete, newsworthy reason for communities and partners to share. Drives the launch-week list.</p><div class="outlets"><span>Accelerator lists</span><span>SBDC networks</span><span>Newsletters</span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 METRICS -->
+  <section class="band" id="metrics">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">08 · What we measure</span><h2>One north star, a few honest gauges.</h2><p>North star: <b>qualified consultations booked</b> — the leading indicator of revenue for an advisory. Everything else feeds it.</p></div>
+      <div class="grid-4">
+        <div class="kpi"><div class="kph"><span class="kpn">Consultations</span><span class="kpt">10 / 90d</span></div><p class="kpd">Qualified discovery calls booked. The north-star metric.</p><div class="kpbar"><i style="width:40%"></i></div></div>
+        <div class="kpi"><div class="kph"><span class="kpn">Engagements</span><span class="kpt">3–5 / 90d</span></div><p class="kpd">Signed clients — the first proof of product-market fit.</p><div class="kpbar"><i style="width:30%"></i></div></div>
+        <div class="kpi"><div class="kph"><span class="kpn">Radar subs</span><span class="kpt">500 / 90d</span></div><p class="kpd">Newsletter subscribers — the owned nurture audience.</p><div class="kpbar"><i style="width:55%"></i></div></div>
+        <div class="kpi"><div class="kph"><span class="kpn">Content reach</span><span class="kpt">Growth</span></div><p class="kpd">Founder-post impressions &amp; site sessions, trending up.</p><div class="kpbar"><i style="width:48%"></i></div></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="ft">
+  <div class="wrap">
+    <div class="ft-top">
+      <div class="ft-brand">
+        <img class="logo-light" src="../assets/logo-lockup.png" alt="Keystone — Federal Grant Advisory" />
+        <img class="logo-dark" src="../assets/logo-lockup-dark.png" alt="Keystone — Federal Grant Advisory" />
+        <p>Internal go-to-market working document. For the public-facing site, follow the link.</p>
+      </div>
+      <div class="ft-col"><h4>This document</h4>
+        <a href="#market">Market study</a>
+        <a href="#position">Positioning</a>
+        <a href="#gtm">Go-to-market</a>
+        <a href="#creative">Creative</a>
+      </div>
+      <div class="ft-col"><h4>More</h4>
+        <a href="#film">Launch film</a>
+        <a href="#news">News &amp; PR</a>
+        <a href="#metrics">Metrics</a>
+        <a href="../Keystone.html">Live site</a>
+      </div>
+      <div class="ft-col"><h4>Go live</h4>
+        <a href="../Keystone.html">View the website</a>
+        <a href="../Keystone.html#contact">Contact</a>
+        <a href="../Keystone.html#about">About the founder</a>
+      </div>
+    </div>
+    <div class="ft-bot">
+      <div class="eyebrow">© 2026 Keystone · Internal GTM v1</div>
+      <div class="ft-disclaimer">Market figures are macro federal-funding references; segment, competitive, and outcome framing are strategic assumptions for planning, not guarantees.</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var KEY='keystone-theme';
+    var root=document.documentElement;
+    var saved=localStorage.getItem(KEY);
+    if(!saved){ saved=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light'; }
+    root.setAttribute('data-theme',saved);
+    var btn=document.getElementById('themeBtn');
+    btn.addEventListener('click',function(){
+      var next=root.getAttribute('data-theme')==='dark'?'light':'dark';
+      root.setAttribute('data-theme',next);
+      localStorage.setItem(KEY,next);
+    });
+  })();
+</script>
+
+</body>
+</html>

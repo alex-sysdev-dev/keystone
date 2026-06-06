@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Keystone — Brand Film</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; height:100%; background:#050507; }
+  #root{ height:100vh; }
+  .film-head{ height:50px; flex-shrink:0; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:0 22px; background:#050507; border-bottom:1px solid rgba(255,255,255,.07); }
+  .film-head a, .film-head span{ font-family:'Geist Mono',ui-monospace,monospace; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#8a8f99; text-decoration:none; display:inline-flex; align-items:center; gap:7px; }
+  .film-head a:hover{ color:#eef1f6; }
+  .film-head .ttl{ color:#4a4e57; }
+  .film-holder{ position:relative; width:100%; height:calc(100vh - 50px); }
+  /* particles + grain keyframes */
+  @keyframes drift { from{ transform:translate3d(0,0,0); } to{ transform:translate3d(var(--dx),var(--dy),0); } }
+  @keyframes streamZ { 0%{ transform:translateZ(-1600px); opacity:0; } 12%{ opacity:.9; } 100%{ transform:translateZ(420px); opacity:0; } }
+  @keyframes grain { 0%{transform:translate(0,0)} 20%{transform:translate(-4%,3%)} 40%{transform:translate(3%,-2%)} 60%{transform:translate(-2%,4%)} 80%{transform:translate(4%,-3%)} 100%{transform:translate(0,0)} }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="animations.jsx"></script>
+<script type="text/babel">
+  const { Stage, useTime, useTimeline, interpolate, Easing, clamp } = window;
+  const GEIST = "'Geist', system-ui, sans-serif";
+  const MONO  = "'Geist Mono', ui-monospace, monospace";
+  const INK = "#eef1f6", STEEL = "#9aa7b8", DIM = "#6b7280", BLUE = "#3b82f6", BLUE2 = "#1e3a8a";
+
+  const fade = (t, s, e, fi, fo) => (t < s || t > e) ? 0 : Math.min(clamp((t - s) / fi, 0, 1), clamp((e - t) / fo, 0, 1));
+  const eo = (x) => Easing.easeOutCubic(clamp(x, 0, 1));
+  const eio = (x) => Easing.easeInOutCubic(clamp(x, 0, 1));
+  const center = { position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "0 7%" };
+  const eyebrow = { fontFamily: MONO, fontSize: 21, letterSpacing: "0.34em", textTransform: "uppercase", color: STEEL };
+
+  function SeekHook(){ const { setTime } = useTimeline(); React.useEffect(() => { window.__seek = setTime; }, [setTime]); return null; }
+
+  // ── Atmosphere: vignette, volumetric blue glows, particles, grain ──
+  const PARTICLES = Array.from({ length: 46 }, (_, i) => {
+    const x = (i * 53 % 100), y = (i * 37 % 100), s = 1 + (i % 4), dur = 9 + (i % 7) * 2.4;
+    const dx = ((i % 5) - 2) * 30 + "px", dy = (((i * 3) % 5) - 2) * 26 + "px";
+    return { x, y, s, dur, dx, dy, d: (i % 6) * -1.7, o: 0.12 + (i % 5) * 0.06 };
+  });
+  function Atmosphere() {
+    const t = useTime();
+    const pulse = 0.5 + 0.5 * Math.sin(t * 0.7);
+    return (
+      <div style={{ position: "absolute", inset: 0, overflow: "hidden", background: "radial-gradient(120% 90% at 50% 40%, #0b0d12 0%, #070709 60%, #040406 100%)" }}>
+        <div style={{ position: "absolute", left: "8%", top: "10%", width: 700, height: 700, borderRadius: "50%", background: `radial-gradient(circle, ${BLUE}22, transparent 65%)`, filter: "blur(40px)", opacity: 0.5 + 0.3 * pulse }} />
+        <div style={{ position: "absolute", right: "4%", bottom: "2%", width: 760, height: 760, borderRadius: "50%", background: `radial-gradient(circle, ${BLUE2}55, transparent 62%)`, filter: "blur(50px)", opacity: 0.55 }} />
+        {PARTICLES.map((p, i) => (
+          <div key={i} style={{ position: "absolute", left: p.x + "%", top: p.y + "%", width: p.s, height: p.s, borderRadius: "50%", background: i % 4 === 0 ? BLUE : "#cfd6e0", opacity: p.o, "--dx": p.dx, "--dy": p.dy, animation: `drift ${p.dur}s ease-in-out ${p.d}s infinite alternate`, boxShadow: i % 4 === 0 ? `0 0 6px ${BLUE}` : "none" }} />
+        ))}
+        <div style={{ position: "absolute", inset: "-10%", opacity: 0.05, mixBlendMode: "overlay", backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")", animation: "grain 0.5s steps(3) infinite" }} />
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 75% 65% at 50% 50%, transparent 35%, rgba(0,0,0,.78))" }} />
+      </div>
+    );
+  }
+
+  // ── S1: logo forms from light streaks ──
+  function S1_Logo() {
+    const t = useTime();
+    const op = fade(t, 0, 8, 0.8, 0.9); if (op <= 0) return null;
+    const conv = eio((t - 0.4) / 2.6);          // streaks converge 0.4→3.0
+    const markO = eo((t - 2.6) / 1.4);           // mark resolves
+    const bloom = eo((t - 2.8) / 1.6) * (1 - clamp((t - 6) / 2, 0, 1));
+    const ey = eo((t - 4.4) / 1.2);
+    const streaks = [-3, -1.6, 0, 1.6, 3];
+    return (
+      <div style={{ ...center, opacity: op }}>
+        <div style={{ position: "relative", width: 360, height: 300, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          {streaks.map((s, i) => (
+            <div key={i} style={{ position: "absolute", top: `calc(50% + ${s * 26}px)`, left: 0, right: 0, height: 1.5,
+              background: `linear-gradient(90deg, transparent, ${i === 2 ? "#dfe6f0" : BLUE}, transparent)`,
+              opacity: (1 - conv) * 0.9, transform: `scaleX(${0.3 + conv * 0.7}) translateX(${(1 - conv) * (i - 2) * 40}px)`, filter: "blur(0.4px)" }} />
+          ))}
+          <div style={{ position: "absolute", width: 240, height: 240, borderRadius: "50%", background: `radial-gradient(circle, ${BLUE}55, transparent 60%)`, filter: "blur(30px)", opacity: bloom }} />
+          <img src="../assets/logo-mark-dark.png" alt="Keystone" style={{ height: 168, opacity: markO, transform: `scale(${0.82 + 0.18 * eo((t - 2.6) / 1.4)})`, filter: `drop-shadow(0 0 ${18 * bloom + 6}px ${BLUE}88)` }} />
+        </div>
+        <div style={{ ...eyebrow, marginTop: 30, opacity: ey }}>Keystone</div>
+      </div>
+    );
+  }
+
+  // ── S2: push through corridor ──
+  function S2_Corridor() {
+    const t = useTime();
+    const op = fade(t, 8, 15.5, 0.7, 0.9); if (op <= 0) return null;
+    const planes = [0, 1, 2, 3, 4, 5];
+    const headO = eo((t - 10.4) / 1.2);
+    return (
+      <div style={{ position: "absolute", inset: 0, opacity: op, perspective: "900px", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, transformStyle: "preserve-3d" }}>
+          {planes.map((p) => (
+            <div key={p} style={{ position: "absolute", inset: "-20%", border: `1px solid ${BLUE}33`,
+              backgroundImage: `linear-gradient(${BLUE}14 1px,transparent 1px),linear-gradient(90deg,${BLUE}14 1px,transparent 1px)`, backgroundSize: "80px 80px",
+              transform: "translateZ(-1600px)", animation: `streamZ 6s linear ${p * -1}s infinite`, opacity: 0.5 }} />
+          ))}
+        </div>
+        <div style={{ ...center }}>
+          <div style={{ fontFamily: GEIST, fontWeight: 600, fontSize: 60, letterSpacing: "-0.035em", color: INK, opacity: headO, transform: `translateY(${(1 - headO) * 20}px)`, textShadow: `0 0 30px ${BLUE}66` }}>
+            Operational intelligence
+          </div>
+          <div style={{ fontFamily: GEIST, fontWeight: 300, fontSize: 28, color: STEEL, opacity: eo((t - 11) / 1.2), marginTop: 10 }}>for federal funding.</div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── S3: capabilities triptych ──
+  function Bars({ on }) {
+    const t = useTime();
+    const vals = [0.5, 0.78, 0.62, 0.92, 0.7, 0.85];
+    return (
+      <div style={{ display: "flex", gap: 12, alignItems: "flex-end", height: 110, marginTop: 26 }}>
+        {vals.map((v, i) => {
+          const h = eo((t - on - 0.2 - i * 0.07) / 0.7) * v;
+          return <div key={i} style={{ width: 26, height: 110 * h, background: `linear-gradient(${BLUE}, ${BLUE2})`, borderRadius: 4, boxShadow: `0 0 16px ${BLUE}66` }} />;
+        })}
+      </div>
+    );
+  }
+  function Checks({ on }) {
+    const t = useTime();
+    return (
+      <div style={{ display: "flex", gap: 14, marginTop: 28 }}>
+        {[0, 1, 2, 3, 4].map((i) => {
+          const o = eo((t - on - 0.3 - i * 0.16) / 0.4);
+          return (
+            <div key={i} style={{ width: 46, height: 46, borderRadius: 12, border: `1.5px solid ${BLUE}`, display: "flex", alignItems: "center", justifyContent: "center", opacity: o, transform: `scale(${0.6 + 0.4 * o})`, boxShadow: `0 0 18px ${BLUE}55`, background: `${BLUE}1a` }}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={INK} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5" /></svg>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+  function Net({ on }) {
+    const t = useTime();
+    const nodes = [[0, 0], [-70, -50], [70, -50], [-90, 40], [90, 40], [0, 70], [-40, -90], [40, -90]];
+    return (
+      <div style={{ position: "relative", width: 260, height: 220, marginTop: 22 }}>
+        {nodes.map((n, i) => {
+          const o = eo((t - on - 0.2 - i * 0.1) / 0.5);
+          return <div key={i} style={{ position: "absolute", left: `calc(50% + ${n[0]}px)`, top: `calc(50% + ${n[1]}px)`, width: i === 0 ? 16 : 10, height: i === 0 ? 16 : 10, marginLeft: -6, marginTop: -6, borderRadius: "50%", background: i === 0 ? INK : BLUE, opacity: o, transform: `scale(${o})`, boxShadow: `0 0 12px ${BLUE}` }} />;
+        })}
+        <svg style={{ position: "absolute", inset: 0 }} width="260" height="220">
+          {nodes.slice(1).map((n, i) => {
+            const o = eo((t - on - 0.4 - i * 0.1) / 0.6);
+            return <line key={i} x1="130" y1="110" x2={130 + n[0]} y2={110 + n[1]} stroke={BLUE} strokeWidth="1" opacity={o * 0.5} />;
+          })}
+        </svg>
+      </div>
+    );
+  }
+  function S3_Caps() {
+    const t = useTime();
+    const op = fade(t, 15.5, 33, 0.6, 0.8); if (op <= 0) return null;
+    const beats = [
+      { s: 15.8, e: 21, h: "Real-time clarity", sub: "Every signal, the moment it matters.", viz: Bars },
+      { s: 21, e: 27, h: "Every requirement, verified", sub: "Compliance, cleared before you submit.", viz: Checks },
+      { s: 27, e: 33, h: "Built to scale", sub: "From one proposal to a funding program.", viz: Net },
+    ];
+    const b = beats.find((x) => t >= x.s && t < x.e) || beats[0];
+    const bo = fade(t, b.s, b.e, 0.55, 0.7);
+    const Viz = b.viz;
+    return (
+      <div style={{ ...center, opacity: op }}>
+        <div style={{ opacity: bo, display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <div style={{ fontFamily: GEIST, fontWeight: 600, fontSize: 56, letterSpacing: "-0.035em", color: INK, textShadow: `0 0 28px ${BLUE}44` }}>{b.h}</div>
+          <div style={{ fontFamily: GEIST, fontWeight: 300, fontSize: 23, color: STEEL, marginTop: 8 }}>{b.sub}</div>
+          <Viz on={b.s} />
+        </div>
+      </div>
+    );
+  }
+
+  // ── S4: holographic UI reveal ──
+  function HoloCard({ children, delay, x, on, t }) {
+    const o = eo((t - on - delay) / 0.8);
+    return (
+      <div style={{ background: "linear-gradient(150deg, rgba(20,28,44,.86), rgba(10,14,22,.8))", border: `1px solid ${BLUE}44`, borderRadius: 16, padding: 22, minWidth: 210,
+        opacity: o, transform: `translateY(${(1 - o) * 30}px) translateX(${x}px) perspective(800px) rotateY(${x / -30}deg)`, boxShadow: `0 30px 70px -20px #000, 0 0 40px ${BLUE}22`, backdropFilter: "blur(8px)" }}>
+        {children}
+      </div>
+    );
+  }
+  function S4_UI() {
+    const t = useTime();
+    const op = fade(t, 33, 39.5, 0.6, 0.8); if (op <= 0) return null;
+    const headO = eo((t - 33.4) / 1);
+    const lbl = { fontFamily: MONO, fontSize: 9.5, letterSpacing: "0.16em", textTransform: "uppercase", color: STEEL, marginBottom: 10 };
+    const stages = [1, 1, 1, 0, 0];
+    return (
+      <div style={{ ...center, opacity: op }}>
+        <div style={{ fontFamily: GEIST, fontWeight: 600, fontSize: 50, letterSpacing: "-0.035em", color: INK, opacity: headO, marginBottom: 36, textShadow: `0 0 30px ${BLUE}55` }}>One place. Total visibility.</div>
+        <div style={{ display: "flex", gap: 20, alignItems: "flex-start" }}>
+          <HoloCard delay={0.2} x={-12} on={33} t={t}>
+            <div style={lbl}>To deadline</div>
+            <div style={{ fontFamily: GEIST, fontSize: 38, fontWeight: 600, color: INK, letterSpacing: "-0.03em" }}>46<span style={{ fontSize: 18, color: STEEL }}>d 18h</span></div>
+          </HoloCard>
+          <HoloCard delay={0.45} x={0} on={33} t={t}>
+            <div style={lbl}>Five-stage path</div>
+            <div style={{ display: "flex", gap: 7, marginTop: 4 }}>
+              {stages.map((s, i) => <div key={i} style={{ width: 30, height: 6, borderRadius: 3, background: s ? BLUE : "#2a2f3a", boxShadow: s ? `0 0 10px ${BLUE}` : "none" }} />)}
+            </div>
+            <div style={{ fontFamily: GEIST, fontSize: 15, color: STEEL, marginTop: 14 }}>Stage 3 · Write</div>
+          </HoloCard>
+          <HoloCard delay={0.7} x={12} on={33} t={t}>
+            <div style={lbl}>Compliance</div>
+            <div style={{ fontFamily: GEIST, fontSize: 38, fontWeight: 600, color: INK, letterSpacing: "-0.03em" }}>87<span style={{ fontSize: 18, color: STEEL }}>%</span></div>
+            <div style={{ height: 6, borderRadius: 3, background: "#2a2f3a", marginTop: 12, overflow: "hidden" }}><div style={{ width: `${eo((t - 34.4) / 1) * 87}%`, height: "100%", background: BLUE, boxShadow: `0 0 10px ${BLUE}` }} /></div>
+          </HoloCard>
+        </div>
+      </div>
+    );
+  }
+
+  // ── S5: hero finale ──
+  function S5_Hero() {
+    const t = useTime();
+    const op = fade(t, 39.5, 47, 0.7, 0.7); if (op <= 0) return null;
+    const p = clamp((t - 39.8) / 1.2, 0, 1);
+    const eb = Easing.easeOutBack(p);
+    const bloom = eo((t - 40) / 1.4) * (1 - clamp((t - 45.5) / 1.5, 0, 1));
+    const wordO = eo((t - 40.8) / 1);
+    const tagO = eo((t - 41.6) / 1);
+    const urlO = eo((t - 42.4) / 1);
+    return (
+      <div style={{ ...center, opacity: op }}>
+        <div style={{ position: "absolute", width: 420, height: 420, borderRadius: "50%", background: `radial-gradient(circle, ${BLUE}44, transparent 60%)`, filter: "blur(40px)", opacity: bloom }} />
+        <img src="../assets/logo-mark-dark.png" alt="" style={{ height: 132, opacity: clamp((t - 39.8) / 0.7, 0, 1), transform: `scale(${0.6 + 0.4 * eb})`, filter: `drop-shadow(0 0 ${24 * bloom + 8}px ${BLUE}aa)`, marginBottom: 30 }} />
+        <div style={{ fontFamily: GEIST, fontWeight: 600, fontSize: 96, letterSpacing: "-0.045em", color: INK, opacity: wordO, transform: `translateY(${(1 - wordO) * 16}px)` }}>Keystone</div>
+        <div style={{ fontFamily: GEIST, fontWeight: 300, fontSize: 30, color: STEEL, opacity: tagO, marginTop: 16, letterSpacing: "-0.01em" }}>Funding favors the well-prepared.</div>
+        <div style={{ fontFamily: MONO, fontSize: 19, letterSpacing: "0.26em", color: DIM, opacity: urlO, marginTop: 40 }}>KEYSTONE.CO</div>
+      </div>
+    );
+  }
+
+  function Film() {
+    return (
+      <Stage width={1920} height={1080} duration={47} background="#050507" persistKey="keystone-brand-film">
+        <SeekHook />
+        <Atmosphere />
+        <S1_Logo /><S2_Corridor /><S3_Caps /><S4_UI /><S5_Hero />
+      </Stage>
+    );
+  }
+  function Page() {
+    return (
+      <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
+        <div className="film-head">
+          <a href="Keystone Launch Strategy.html"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M11 18l-6-6 6-6" /></svg> Strategy</a>
+          <span className="ttl">Brand Film · 0:47 · 1920×1080 · screen-record to MP4</span>
+          <a href="../app/Keystone Landing.html">Product →</a>
+        </div>
+        <div className="film-holder"><Film /></div>
+      </div>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById("root")).render(<Page />);
+</script>
+</body>
+</html>

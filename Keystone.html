@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Keystone — Federal Grant Advisory</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --font-sans:"Geist",ui-sans-serif,system-ui,-apple-system,sans-serif;
+    --font-mono:"Poppins",ui-sans-serif,system-ui,-apple-system,sans-serif;
+    --r-sm:8px; --r-md:12px; --r-lg:16px; --r-full:9999px;
+    --ease:cubic-bezier(0.16,1,0.3,1);
+    --maxw:1240px;
+    --wedge:#9aa0a6;
+  }
+
+  /* ── LIGHT (default) ─────────────────────── */
+  [data-theme="light"]{
+    --bg:#fcfcfa; --bg-2:#f5f5f1; --bg-3:#efefe9;
+    --surface:#ffffff;
+    --surface-glass:#ffffff;
+    --ink:#17181c; --ink-2:#3e4047; --muted:#7c7f87; --faint:#a9abb2;
+    --line:#e7e7e1; --line-strong:#d8d8d1; --line-soft:#efefe9;
+    --brand:#1b1c20; --brand-hover:#000000; --on-brand:#fcfcfa;
+    --shadow-sm:0 1px 2px rgba(20,20,25,.04);
+    --shadow-card:0 24px 60px -34px rgba(20,20,25,.30);
+    --shadow-lift:0 32px 70px -32px rgba(20,20,25,.34);
+    --grid-line:rgba(20,20,25,.05);
+    --logo-light:block; --logo-dark:none;
+  }
+
+  /* ── DARK (BlueLineOps mechanics, monochrome) ─ */
+  [data-theme="dark"]{
+    --bg:#09090b; --bg-2:#121214; --bg-3:#161618;
+    --surface:#18181b;
+    --surface-glass:linear-gradient(150deg,rgba(24,24,27,.92),rgba(14,14,16,.88));
+    --ink:#f4f4f5; --ink-2:#d4d4d8; --muted:#a1a1aa; --faint:#71717a;
+    --line:rgba(255,255,255,.10); --line-strong:rgba(255,255,255,.17); --line-soft:rgba(255,255,255,.06);
+    --brand:#f4f4f5; --brand-hover:#ffffff; --on-brand:#0b0b0d;
+    --shadow-sm:0 1px 2px rgba(0,0,0,.4);
+    --shadow-card:0 20px 50px -22px rgba(0,0,0,.9);
+    --shadow-lift:0 30px 65px -24px rgba(0,0,0,.95);
+    --grid-line:rgba(255,255,255,.045);
+    --logo-light:none; --logo-dark:block;
+    --wedge:#8a9099;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; scroll-behavior:smooth; }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:var(--font-sans); font-weight:400; line-height:1.55;
+    transition:background .4s var(--ease), color .4s var(--ease);
+  }
+  ::selection{ background:var(--brand); color:var(--on-brand); }
+  a{ color:inherit; text-decoration:none; }
+  img{ display:block; max-width:100%; }
+  .wrap{ max-width:var(--maxw); margin:0 auto; padding:0 40px; }
+
+  .eyebrow{
+    font-family:var(--font-mono); font-weight:500; font-size:11px;
+    letter-spacing:0.22em; text-transform:uppercase; color:var(--muted);
+  }
+  .logo-light{ display:var(--logo-light); }
+  .logo-dark{ display:var(--logo-dark); }
+
+  /* ── NAV ─────────────────────────────────── */
+  nav.bar{
+    position:sticky; top:0; z-index:50;
+    background:color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter:blur(14px) saturate(1.1);
+    border-bottom:1px solid var(--line);
+    transition:background .4s var(--ease), border-color .4s var(--ease);
+  }
+  .bar-in{ max-width:var(--maxw); margin:0 auto; padding:0 40px; height:74px; display:flex; align-items:center; justify-content:space-between; gap:24px; }
+  .brand-lock{ display:flex; align-items:center; gap:11px; }
+  .brand-lock img{ height:34px; width:auto; }
+  .brand-lock .bn{ font-weight:600; font-size:19px; letter-spacing:-0.02em; color:var(--ink); }
+  .navlinks{ display:flex; align-items:center; gap:4px; }
+  .navlinks a{ font-size:14px; color:var(--ink-2); padding:9px 14px; border-radius:var(--r-sm); transition:background .2s var(--ease), color .2s var(--ease); }
+  .navlinks a:hover{ background:var(--bg-2); color:var(--ink); }
+  .nav-right{ display:flex; align-items:center; gap:10px; }
+
+  .navdrop{ position:relative; }
+  .navdrop-t{ font-family:var(--font-sans); font-size:14px; font-weight:400; color:var(--ink-2); background:transparent; border:none; cursor:pointer; padding:9px 14px; border-radius:var(--r-sm); display:inline-flex; align-items:center; gap:6px; transition:background .2s var(--ease), color .2s var(--ease); }
+  .navdrop-t:hover, .navdrop:hover .navdrop-t, .navdrop:focus-within .navdrop-t{ background:var(--bg-2); color:var(--ink); }
+  .navdrop-t svg{ width:12px; height:12px; transition:transform .2s var(--ease); opacity:.7; }
+  .navdrop:hover .navdrop-t svg, .navdrop:focus-within .navdrop-t svg{ transform:rotate(180deg); }
+  .navdrop-t.alt{ border:1px solid var(--line-strong); }
+  .navdrop-t.alt:hover, .navdrop.internal:hover .navdrop-t.alt, .navdrop.internal:focus-within .navdrop-t.alt{ border-color:var(--muted); }
+  .navdrop-menu{ position:absolute; top:calc(100% + 9px); left:0; min-width:268px; background:var(--surface); border:1px solid var(--line-strong); border-radius:var(--r-md); box-shadow:var(--shadow-card); padding:8px; opacity:0; visibility:hidden; transform:translateY(-6px); transition:opacity .18s var(--ease), transform .18s var(--ease), visibility .18s; z-index:60; }
+  .navdrop-menu.right{ left:auto; right:0; }
+  .navdrop:hover .navdrop-menu, .navdrop:focus-within .navdrop-menu{ opacity:1; visibility:visible; transform:translateY(0); }
+  .navdrop-menu .mlabel{ font-family:var(--font-mono); font-size:9.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--faint); padding:9px 12px 7px; }
+  .navdrop-menu a{ display:flex; align-items:center; justify-content:space-between; gap:14px; padding:10px 12px; border-radius:var(--r-sm); font-size:14px; font-weight:400; color:var(--ink-2); transition:background .15s var(--ease), color .15s var(--ease); }
+  .navdrop-menu a:hover{ background:var(--bg-2); color:var(--ink); }
+  .navdrop-menu a .mc{ font-family:var(--font-mono); font-size:10px; letter-spacing:0.06em; color:var(--faint); }
+
+  .ttoggle{
+    width:38px; height:38px; border-radius:var(--r-full);
+    border:1px solid var(--line-strong); background:var(--surface);
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+    color:var(--ink-2); transition:all .2s var(--ease);
+  }
+  .ttoggle:hover{ color:var(--ink); border-color:var(--muted); }
+  .ttoggle svg{ width:17px; height:17px; }
+  .tt-sun{ display:none; } .tt-moon{ display:block; }
+  [data-theme="dark"] .tt-sun{ display:block; } [data-theme="dark"] .tt-moon{ display:none; }
+
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--font-sans); font-size:14px; font-weight:500;
+    padding:11px 20px; border-radius:var(--r-sm); cursor:pointer;
+    border:1px solid transparent; transition:all .2s var(--ease); white-space:nowrap;
+  }
+  .btn-primary{ background:var(--brand); color:var(--on-brand); }
+  .btn-primary:hover{ background:var(--brand-hover); transform:translateY(-1px); box-shadow:var(--shadow-card); }
+  .btn-ghost{ background:transparent; color:var(--ink); border-color:var(--line-strong); }
+  .btn-ghost:hover{ border-color:var(--ink); background:var(--bg-2); }
+  .btn-lg{ padding:14px 26px; font-size:15px; }
+  .btn svg{ width:15px; height:15px; }
+
+  /* ── HERO ────────────────────────────────── */
+  .hero{ position:relative; padding:96px 0 60px; overflow:hidden; }
+  .hero-grid-bg{
+    position:absolute; inset:0; pointer-events:none;
+    background-image:linear-gradient(var(--grid-line) 1px,transparent 1px),linear-gradient(90deg,var(--grid-line) 1px,transparent 1px);
+    background-size:64px 64px;
+    -webkit-mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000,transparent 75%);
+    mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000,transparent 75%);
+  }
+  .hero-in{ position:relative; }
+  .hero-tag{
+    display:inline-flex; align-items:center; gap:10px;
+    border:1px solid var(--line-strong); border-radius:var(--r-full);
+    padding:6px 7px 6px 14px; font-size:12.5px; color:var(--ink-2); margin-bottom:30px;
+    background:var(--surface);
+  }
+  .hero-tag b{ font-weight:600; color:var(--ink); }
+  .hero-tag .chip{ font-family:var(--font-mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; background:var(--brand); color:var(--on-brand); padding:3px 9px; border-radius:var(--r-full); }
+  h1.hero-h{
+    font-size:clamp(44px,6.4vw,82px); font-weight:600; line-height:1.0;
+    letter-spacing:-0.035em; margin:0; max-width:18ch; color:var(--ink);
+    text-wrap:balance;
+  }
+  h1.hero-h em{ font-style:normal; color:var(--muted); }
+  .hero-sub{ font-size:clamp(17px,1.6vw,20px); font-weight:300; color:var(--ink-2); max-width:60ch; margin:28px 0 0; line-height:1.55; }
+  .hero-cta{ display:flex; gap:13px; margin-top:38px; flex-wrap:wrap; }
+  .hero-meta{ display:flex; gap:30px; margin-top:46px; flex-wrap:wrap; }
+  .hero-meta .hm{ display:flex; align-items:center; gap:10px; font-size:13.5px; color:var(--muted); }
+  .hero-meta .hm svg{ width:16px; height:16px; color:var(--ink-2); flex-shrink:0; }
+
+  /* ── shared section ──────────────────────── */
+  section.band{ padding:96px 0; border-top:1px solid var(--line); }
+  .sec-head{ max-width:720px; margin-bottom:56px; }
+  .sec-head .eyebrow{ margin-bottom:18px; }
+  .sec-head h2{ font-size:clamp(30px,3.4vw,42px); font-weight:600; letter-spacing:-0.03em; line-height:1.08; margin:0; color:var(--ink); text-wrap:balance; }
+  .sec-head p{ font-size:17px; font-weight:300; color:var(--ink-2); margin:18px 0 0; line-height:1.6; max-width:62ch; }
+
+  /* ── FOOTER ──────────────────────────────── */
+  footer.ft{ border-top:1px solid var(--line); background:var(--bg-2); padding:72px 0 40px; transition:background .4s var(--ease); }
+  .ft-top{ display:grid; grid-template-columns:1.6fr 1fr 1fr 1fr; gap:40px; padding-bottom:56px; border-bottom:1px solid var(--line); }
+  .ft-brand img{ height:30px; margin-bottom:18px; }
+  .ft-brand p{ font-size:14px; color:var(--muted); max-width:34ch; font-weight:300; line-height:1.6; margin:0; }
+  .ft-col h4{ font-family:var(--font-mono); font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase; color:var(--faint); margin:0 0 18px; font-weight:500; }
+  .ft-col a{ display:block; font-size:14px; color:var(--ink-2); padding:6px 0; transition:color .2s var(--ease); }
+  .ft-col a:hover{ color:var(--ink); }
+  .ft-bot{ display:flex; justify-content:space-between; align-items:center; gap:20px; flex-wrap:wrap; padding-top:28px; }
+  .ft-bot .eyebrow{ color:var(--faint); letter-spacing:0.12em; }
+
+  @media (max-width:980px){
+    .navlinks{ display:none; }
+    .ft-top{ grid-template-columns:1fr 1fr; gap:32px; }
+  }
+  @media (max-width:680px){
+    .wrap,.bar-in{ padding-left:22px; padding-right:22px; }
+    .ft-top{ grid-template-columns:1fr; }
+  }
+</style>
+<link id="gfont-Poppins" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap">
+</head>
+<body>
+
+<nav class="bar">
+  <div class="bar-in">
+    <a class="brand-lock" href="#top" aria-label="Keystone home">
+      <img class="logo-light" src="assets/logo-mark.png" alt="Keystone" />
+      <img class="logo-dark" src="assets/logo-mark-dark.png" alt="Keystone" />
+      <span class="bn">Keystone</span>
+    </a>
+    <div class="navlinks">
+      <div class="navdrop">
+        <button class="navdrop-t" aria-haspopup="true">Services <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button>
+        <div class="navdrop-menu" role="menu">
+          <div class="mlabel">The six services</div>
+          <a href="services/opportunity-eligibility.html"><span>Opportunity &amp; eligibility</span><span class="mc">01</span></a>
+          <a href="services/proposal-development.html"><span>Proposal development</span><span class="mc">02</span></a>
+          <a href="services/compliance-review.html"><span>Compliance review</span><span class="mc">03</span></a>
+          <a href="services/capture-strategy.html"><span>Capture &amp; strategy</span><span class="mc">04</span></a>
+          <a href="services/submission-systems.html"><span>Submission &amp; systems</span><span class="mc">05</span></a>
+          <a href="services/debrief-resubmission.html"><span>Debrief &amp; resubmission</span><span class="mc">06</span></a>
+        </div>
+      </div>
+      <a href="#process">Process</a>
+      <a href="#work">Engagements</a>
+      <a href="#about">About</a>
+    </div>
+    <div class="nav-right">
+      <div class="navdrop internal">
+        <button class="navdrop-t alt" aria-haspopup="true">Internal <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button>
+        <div class="navdrop-menu right" role="menu">
+          <div class="mlabel">Working documents</div>
+          <a href="marketing/Keystone Launch Strategy.html"><span>Launch strategy</span><span class="mc">GTM</span></a>
+          <a href="marketing/Keystone Launch Film.html"><span>Launch film</span><span class="mc">0:30</span></a>
+        </div>
+      </div>
+      <button class="ttoggle" id="themeBtn" aria-label="Toggle theme">
+        <svg class="tt-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        <svg class="tt-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
+      </button>
+      <a href="#contact" class="btn btn-primary">Book a consultation</a>
+    </div>
+  </div>
+</nav>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-grid-bg"></div>
+    <div class="wrap hero-in">
+      <div class="hero-tag"><span class="chip" style="font-family: Poppins">Federal</span> <b>Grant strategy &amp; proposal development</b></div>
+      <h1 class="hero-h">Funding favors the well-prepared.</h1>
+      <p class="hero-sub">Keystone helps startups, research institutions, and established firms win competitive federal grants and contracts — with proposals built to the agency's exact criteria, evidence-led and review-ready.</p>
+      <div class="hero-cta">
+        <a href="#contact" class="btn btn-primary btn-lg">Start an engagement
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+        </a>
+        <a href="#process" class="btn btn-ghost btn-lg">See how it works</a>
+      </div>
+      <div class="hero-meta">
+        <div class="hm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg> SBIR/STTR, NIH, NSF, DOE &amp; DoD</div>
+        <div class="hm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg> Compliance-checked to the solicitation</div>
+        <div class="hm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg> Submission-ready in Grants.gov &amp; SAM</div>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    /* ── STATS ─────────────────────────────── */
+    .stats{ border-top:1px solid var(--line); background:var(--bg-2); transition:background .4s var(--ease); }
+    .stats-in{ display:grid; grid-template-columns:repeat(4,1fr); }
+    .stat{ padding:48px 36px; border-right:1px solid var(--line); }
+    .stat:last-child{ border-right:none; }
+    .stat .v{ font-size:clamp(34px,3.6vw,46px); font-weight:600; letter-spacing:-0.03em; color:var(--ink); line-height:1; }
+    .stat .l{ font-size:13.5px; color:var(--muted); margin-top:12px; font-weight:300; line-height:1.45; }
+    .stats-note{ padding:16px 40px; border-top:1px solid var(--line); }
+    .stats-note .eyebrow{ color:var(--faint); letter-spacing:0.14em; }
+
+    /* ── SERVICES ──────────────────────────── */
+    .svc-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+    .svc{
+      display:flex; flex-direction:column; color:inherit;
+      background:var(--surface-glass); border:1px solid var(--line);
+      border-radius:var(--r-lg); padding:30px 28px 28px;
+      transition:transform .22s var(--ease), border-color .22s var(--ease), box-shadow .22s var(--ease);
+      box-shadow:var(--shadow-sm); position:relative;
+    }
+    .svc:hover{ transform:translateY(-4px); border-color:var(--line-strong); box-shadow:var(--shadow-card); }
+    .svc .ic{ width:44px; height:44px; border-radius:var(--r-md); border:1px solid var(--line-strong); display:flex; align-items:center; justify-content:center; color:var(--ink); margin-bottom:22px; background:var(--bg); }
+    .svc .ic svg{ width:21px; height:21px; }
+    .svc h3{ font-size:19px; font-weight:600; letter-spacing:-0.01em; margin:0 0 9px; color:var(--ink); }
+    .svc p{ font-size:14.5px; color:var(--ink-2); font-weight:300; margin:0 0 18px; line-height:1.55; }
+    .svc ul{ list-style:none; margin:0; padding:18px 0 0; border-top:1px solid var(--line-soft); display:flex; flex-direction:column; gap:9px; }
+    .svc li{ font-size:13px; color:var(--muted); display:flex; align-items:center; gap:9px; }
+    .svc li::before{ content:""; width:5px; height:5px; border-radius:1px; background:var(--wedge); flex-shrink:0; }
+    .svc-more{ display:inline-flex; align-items:center; gap:7px; margin-top:20px; font-family:var(--font-mono); font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); transition:gap .2s var(--ease), color .2s var(--ease); }
+    .svc-more svg{ width:14px; height:14px; }
+    .svc:hover .svc-more{ color:var(--ink); gap:11px; }
+
+    /* ── PROCESS ───────────────────────────── */
+    .proc{ display:grid; grid-template-columns:repeat(5,1fr); gap:0; border:1px solid var(--line); border-radius:var(--r-lg); overflow:hidden; background:var(--surface-glass); }
+    .step{ padding:32px 26px 36px; border-right:1px solid var(--line); position:relative; }
+    .step:last-child{ border-right:none; }
+    .step .n{ font-family:var(--font-mono); font-size:12px; color:var(--muted); letter-spacing:0.04em; }
+    .step .bar{ height:2px; background:var(--line-strong); margin:16px 0 22px; position:relative; }
+    .step .bar::after{ content:""; position:absolute; left:0; top:0; height:2px; width:34%; background:var(--brand); }
+    .step h4{ font-size:17px; font-weight:600; letter-spacing:-0.01em; margin:0 0 9px; color:var(--ink); }
+    .step p{ font-size:13px; color:var(--muted); font-weight:300; margin:0; line-height:1.5; }
+    .proc-foot{ display:flex; align-items:center; gap:14px; margin-top:28px; flex-wrap:wrap; }
+    .proc-foot .eyebrow{ color:var(--faint); }
+
+    /* ── ENGAGEMENTS ───────────────────────── */
+    .eng-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+    .eng{ color:inherit; border:1px solid var(--line); border-radius:var(--r-lg); overflow:hidden; background:var(--surface-glass); display:flex; flex-direction:column; transition:transform .22s var(--ease), box-shadow .22s var(--ease), border-color .22s var(--ease); box-shadow:var(--shadow-sm); }
+    .eng:hover{ transform:translateY(-4px); border-color:var(--line-strong); box-shadow:var(--shadow-card); }
+    .eng-top{ padding:26px 26px 22px; border-bottom:1px solid var(--line-soft); }
+    .eng-tag{ display:inline-block; font-family:var(--font-mono); font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:var(--ink-2); border:1px solid var(--line-strong); border-radius:var(--r-full); padding:4px 11px; margin-bottom:18px; }
+    .eng-top h3{ font-size:19px; font-weight:600; letter-spacing:-0.01em; margin:0 0 10px; color:var(--ink); line-height:1.25; }
+    .eng-top p{ font-size:14px; color:var(--ink-2); font-weight:300; margin:0; line-height:1.55; }
+    .eng-bot{ padding:22px 26px 26px; display:flex; gap:30px; margin-top:auto; }
+    .eng-bot .m .mv{ font-size:24px; font-weight:600; letter-spacing:-0.02em; color:var(--ink); }
+    .eng-bot .m .ml{ font-size:11.5px; color:var(--muted); margin-top:3px; }
+
+    /* ── ABOUT ─────────────────────────────── */
+    .about-grid{ display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:start; }
+    .about-statement{ font-size:clamp(20px,2vw,26px); font-weight:300; line-height:1.5; letter-spacing:-0.01em; color:var(--ink); margin:0; text-wrap:pretty; }
+    .about-statement b{ font-weight:600; }
+    .creds{ display:flex; flex-direction:column; gap:0; border:1px solid var(--line); border-radius:var(--r-lg); overflow:hidden; }
+    .cred{ display:flex; align-items:center; gap:16px; padding:18px 22px; border-bottom:1px solid var(--line-soft); }
+    .cred:last-child{ border-bottom:none; }
+    .cred .ci{ width:34px; height:34px; flex-shrink:0; border-radius:var(--r-sm); border:1px solid var(--line-strong); display:flex; align-items:center; justify-content:center; color:var(--ink); background:var(--bg); }
+    .cred .ci svg{ width:16px; height:16px; }
+    .cred .ct{ font-size:14px; color:var(--ink); font-weight:500; }
+    .cred .cs{ font-size:12.5px; color:var(--muted); font-weight:300; }
+    .team{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; margin-top:56px; }
+    .tm{ border:1px solid var(--line); border-radius:var(--r-lg); padding:22px; background:var(--surface-glass); }
+    .tm .av{ width:46px; height:46px; border-radius:var(--r-full); background:var(--bg-3); border:1px solid var(--line-strong); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:14px; font-weight:500; color:var(--ink-2); margin-bottom:16px; }
+    .tm .tn{ font-size:15px; font-weight:600; color:var(--ink); }
+    .tm .tr{ font-size:12.5px; color:var(--muted); margin-top:3px; font-weight:300; }
+    /* ── FOUNDER ───────────────────────────── */
+    .founder{ display:grid; grid-template-columns:0.82fr 1.18fr; gap:0; border:1px solid var(--line-strong); border-radius:var(--r-lg); overflow:hidden; background:var(--surface-glass); box-shadow:var(--shadow-card); margin-top:56px; }
+    .founder-photo{ position:relative; border-right:1px solid var(--line); background:var(--bg-3); min-height:440px; }
+    .founder-photo img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 18%; }
+    .founder-body{ padding:46px 46px 44px; display:flex; flex-direction:column; }
+    .founder-body .eyebrow{ margin-bottom:16px; display:block; }
+    .founder-body h3{ font-size:30px; font-weight:600; letter-spacing:-0.02em; margin:0; color:var(--ink); line-height:1.05; }
+    .founder-role{ font-family:var(--font-mono); font-size:12px; letter-spacing:0.06em; color:var(--muted); margin:9px 0 26px; }
+    .founder-body p{ font-size:15.5px; color:var(--ink-2); font-weight:300; line-height:1.65; margin:0 0 18px; }
+    .founder-body p:last-of-type{ margin-bottom:0; }
+    .founder-body p b{ font-weight:600; color:var(--ink); }
+    .founder-creds{ display:flex; flex-wrap:wrap; gap:9px; margin-top:26px; padding-top:26px; border-top:1px solid var(--line-soft); }
+    .founder-creds span{ font-family:var(--font-mono); font-size:11px; letter-spacing:0.03em; color:var(--ink-2); border:1px solid var(--line-strong); border-radius:var(--r-full); padding:6px 13px; }
+
+    /* ── CONTACT CTA ───────────────────────── */
+    .cta{ border:1px solid var(--line-strong); border-radius:var(--r-lg); background:var(--surface-glass); padding:64px 56px; display:grid; grid-template-columns:1.3fr 1fr; gap:48px; align-items:center; box-shadow:var(--shadow-card); position:relative; overflow:hidden; }
+    .cta-grid-bg{ position:absolute; inset:0; pointer-events:none; background-image:linear-gradient(var(--grid-line) 1px,transparent 1px),linear-gradient(90deg,var(--grid-line) 1px,transparent 1px); background-size:48px 48px; -webkit-mask-image:radial-gradient(ellipse 70% 90% at 85% 50%,#000,transparent 70%); mask-image:radial-gradient(ellipse 70% 90% at 85% 50%,#000,transparent 70%); }
+    .cta h2{ position:relative; font-size:clamp(28px,3vw,40px); font-weight:600; letter-spacing:-0.03em; line-height:1.1; margin:0; color:var(--ink); }
+    .cta p{ position:relative; font-size:16px; font-weight:300; color:var(--ink-2); margin:16px 0 0; line-height:1.6; max-width:46ch; }
+    .cta-side{ position:relative; display:flex; flex-direction:column; gap:14px; }
+    .cta-side .btn{ justify-content:center; }
+    .cta-side .line{ display:flex; align-items:center; gap:11px; font-size:13.5px; color:var(--muted); }
+    .cta-side .line svg{ width:16px; height:16px; color:var(--ink-2); }
+
+    @media (max-width:980px){
+      .stats-in,.svc-grid,.eng-grid{ grid-template-columns:repeat(2,1fr); }
+      .stat:nth-child(2n){ border-right:none; }
+      .proc{ grid-template-columns:1fr 1fr; }
+      .step{ border-bottom:1px solid var(--line); }
+      .about-grid{ grid-template-columns:1fr; gap:40px; }
+      .team{ grid-template-columns:repeat(2,1fr); }
+      .founder{ grid-template-columns:1fr; }
+      .founder-photo{ border-right:none; border-bottom:1px solid var(--line); min-height:0; aspect-ratio:4/5; max-height:560px; }
+      .founder-photo img{ object-position:center 16%; }
+      .cta{ grid-template-columns:1fr; gap:32px; padding:44px 32px; }
+    }
+    @media (max-width:680px){
+      .stats-in,.svc-grid,.eng-grid,.proc,.team{ grid-template-columns:1fr; }
+      .stat,.step{ border-right:none; border-bottom:1px solid var(--line); }
+    }
+  </style>
+
+  <!-- STATS -->
+  <section class="stats" aria-label="The federal landscape">
+    <div style="max-width:var(--maxw);margin:0 auto;">
+      <div class="stats-in">
+        <div class="stat"><div class="v">$1.2T+</div><div class="l">Awarded in federal assistance each year</div></div>
+        <div class="stat"><div class="v">2,400+</div><div class="l">Active federal grant &amp; assistance programs</div></div>
+        <div class="stat"><div class="v">26</div><div class="l">Grant-making federal agencies</div></div>
+        <div class="stat"><div class="v">$4.5B</div><div class="l">Set aside annually for SBIR / STTR alone</div></div>
+      </div>
+      <div class="stats-note"><div class="eyebrow" style="font-family: Poppins">The opportunity is enormous — and the competition is procedural. Most strong applicants lose on compliance, not merit.</div></div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="band" id="services">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow" style="font-family: Poppins">What we do</div>
+        <h2>Full-cycle grant and proposal advisory.</h2>
+        <p>From identifying the right solicitation to a compliant, review-ready submission — Keystone runs the parts of the process where applications are won or lost.</p>
+      </div>
+      <div class="svc-grid">
+        <a class="svc" href="services/opportunity-eligibility.html">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg></div>
+          <h3>Opportunity &amp; eligibility</h3>
+          <p>We map your work to the right programs and confirm eligibility before a dollar of effort is spent.</p>
+          <ul><li>Solicitation scan &amp; fit scoring</li><li>Agency &amp; program targeting</li><li>Go / no-go recommendation</li></ul>
+          <span class="svc-more">View service <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+        </a>
+        <a class="svc" href="services/proposal-development.html">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h11l5 5v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"></path><path d="M14 4v5h5M8 13h8M8 17h6"></path></svg></div>
+          <h3>Proposal development</h3>
+          <p>We write the narrative, build the work plan, and assemble every required form to the letter of the solicitation.</p>
+          <ul><li>Technical &amp; project narrative</li><li>Budget &amp; justification</li><li>Forms, certifications &amp; attachments</li></ul>
+          <span class="svc-more">View service <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+        </a>
+        <a class="svc" href="services/compliance-review.html">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"></path><path d="M9 12l2 2 4-4"></path></svg></div>
+          <h3>Compliance review</h3>
+          <p>A line-by-line check against the criteria reviewers actually score — before you submit, not after you lose.</p>
+          <ul><li>Solicitation cross-walk</li><li>Page, format &amp; font compliance</li><li>Reviewer-criteria audit</li></ul>
+          <span class="svc-more">View service <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+        </a>
+        <a class="svc" href="services/capture-strategy.html">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="M7 14l4-4 3 3 5-6"></path></svg></div>
+          <h3>Capture &amp; strategy</h3>
+          <p>Positioning, win themes, and a multi-cycle roadmap so each submission is stronger than the last.</p>
+          <ul><li>Win-theme development</li><li>Competitive positioning</li><li>Phase I → Phase II roadmap</li></ul>
+          <span class="svc-more">View service <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+        </a>
+        <a class="svc" href="services/submission-systems.html">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5M21 3l-7 7M8 21H3v-5M3 21l7-7"></path></svg></div>
+          <h3>Submission &amp; systems</h3>
+          <p>We register, package, and submit through Grants.gov, SAM.gov, and agency portals — and confirm receipt.</p>
+          <ul><li>SAM.gov &amp; Grants.gov setup</li><li>Workspace packaging</li><li>Submission &amp; receipt verification</li></ul>
+          <span class="svc-more">View service <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+        </a>
+        <a class="svc" href="services/debrief-resubmission.html">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7M21 4v5h-5"></path></svg></div>
+          <h3>Debrief &amp; resubmission</h3>
+          <p>If a proposal doesn't land, we read the reviews, fix what scored low, and turn it around for the next cycle.</p>
+          <ul><li>Reviewer-comment analysis</li><li>Targeted revisions</li><li>Resubmission planning</li></ul>
+          <span class="svc-more">View service <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="band" id="process">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">How it works</div>
+        <h2>A disciplined path from idea to award.</h2>
+        <p>Every engagement runs the same structured sequence. You always know what stage you're in, what's due, and what's next.</p>
+      </div>
+      <div class="proc">
+        <div class="step"><div class="n">01</div><div class="bar"></div><h4>Qualify</h4><p>Confirm fit, eligibility, and the right solicitation. Honest go / no-go.</p></div>
+        <div class="step"><div class="n">02</div><div class="bar"></div><h4>Strategize</h4><p>Win themes, reviewer criteria, budget shape, and a writing plan.</p></div>
+        <div class="step"><div class="n">03</div><div class="bar"></div><h4>Write</h4><p>Narrative, work plan, budget, and every attachment — to spec.</p></div>
+        <div class="step"><div class="n">04</div><div class="bar"></div><h4>Comply</h4><p>Line-by-line audit against the solicitation and scoring rubric.</p></div>
+        <div class="step"><div class="n">05</div><div class="bar"></div><h4>Submit</h4><p>Package, submit, verify receipt — and prepare the next cycle.</p></div>
+      </div>
+      <div class="proc-foot">
+        <span class="eyebrow">Typical first cycle</span>
+        <span style="color:var(--muted);font-size:13.5px;">6–10 weeks, depending on solicitation complexity and readiness.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ENGAGEMENTS -->
+  <section class="band" id="work">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">Engagements &amp; origin</div>
+        <h2>The kind of work we take on.</h2>
+        <p>Starting with our founder's own federal submission. The rest are representative of how Keystone engages across program types — illustrative scope and targets, not guaranteed outcomes.</p>
+      </div>
+      <div class="eng-grid">
+        <a class="eng" href="services/opportunity-eligibility.html#case">
+          <div class="eng-top">
+            <span class="eng-tag">Firsthand · USTRANSCOM CSO</span>
+            <h3>AxiomOps — our founder's own federal submission</h3>
+            <p>Before Keystone, our founder built AxiomOps and targeted a USTRANSCOM Commercial Solutions Opening himself — self-registering SAM.gov and submitting solo. That experience became this firm.</p>
+          </div>
+          <div class="eng-bot">
+            <div class="m"><div class="mv">Solo</div><div class="ml">Targeted, registered &amp; submitted alone</div></div>
+            <div class="m"><div class="mv">CSO</div><div class="ml">The right vehicle over a forced fit</div></div>
+          </div>
+        </a>
+        <a class="eng" href="services/proposal-development.html#case">
+          <div class="eng-top">
+            <span class="eng-tag">NIH · R01</span>
+            <h3>Helix Therapeutics — science into a fundable proposal</h3>
+            <p>Compelling preclinical data, no proposal capacity. We restructured the application around the Specific Aims and review criteria and assembled a complete, compliant package.</p>
+          </div>
+          <div class="eng-bot">
+            <div class="m"><div class="mv">40 → 12</div><div class="ml">Pages distilled to a criteria-aligned narrative</div></div>
+            <div class="m"><div class="mv">1 wk</div><div class="ml">Buffer before the deadline</div></div>
+          </div>
+        </a>
+        <a class="eng" href="services/submission-systems.html#case">
+          <div class="eng-top">
+            <span class="eng-tag">HHS · HRSA</span>
+            <h3>Meridian Community Health — cleared the federal plumbing</h3>
+            <p>A nonprofit FQHC with an inactive SAM registration and no UEI, three weeks out. We untangled the registrations and submitted four days early, receipt confirmed.</p>
+          </div>
+          <div class="eng-bot">
+            <div class="m"><div class="mv">3 wks</div><div class="ml">Inactive registration to on-time submission</div></div>
+            <div class="m"><div class="mv">4 days</div><div class="ml">Submitted ahead of deadline</div></div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="band" id="about">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">About Keystone</div>
+        <h2>The piece that holds the application together.</h2>
+      </div>
+      <div class="about-grid">
+        <p class="about-statement">A keystone is the one stone that lets an arch carry weight. <b>That's the role we play</b> — the structural piece between a worthy organization and the agency deciding where public money goes. We bring the rigor, the process, and the procedural fluency so your ideas are judged on their merit, not lost on a technicality.</p>
+        <div class="creds">
+          <div class="cred"><div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"></path></svg></div><div><div class="ct">Compliance-first method</div><div class="cs">Every proposal audited to the solicitation</div></div></div>
+          <div class="cred"><div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"></path><circle cx="12" cy="12" r="3"></circle></svg></div><div><div class="ct">Reviewer's-eye reading</div><div class="cs">We score your draft the way the panel will</div></div></div>
+          <div class="cred"><div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M3 12h18M3 17h12"></path></svg></div><div><div class="ct">Plain-language clarity</div><div class="cs">Technical depth without the jargon fog</div></div></div>
+          <div class="cred"><div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></div><div><div class="ct">No-surprise process</div><div class="cs">Clear stages, deadlines, and ownership</div></div></div>
+        </div>
+      </div>
+      <div class="founder">
+        <div class="founder-photo">
+          <img src="assets/founder.jpg" alt="Alexander Aguilar, Principal &amp; Founder of Keystone" />
+        </div>
+        <div class="founder-body">
+          <div class="eyebrow">Principal &amp; Founder</div>
+          <h3>Alexander Aguilar</h3>
+          <div class="founder-role">Full-stack developer · Operations technologist</div>
+          <p>Alex founded Keystone after living the federal process end to end. He built <b>AxiomOps</b> — an agentic, multi-agent AI platform for logistics operations — and then wrote and submitted its federal proposal himself.</p>
+          <p>That submission, a <b>USTRANSCOM Commercial Solutions Opening</b> targeting logistics optimization (AoI-902), meant registering the entity in SAM.gov, decoding the solicitation, and producing the technical white paper, budget, and briefing solo. Keystone exists so the next founder doesn't have to learn it the hard way.</p>
+          <div class="founder-creds">
+            <span>Built AxiomOps · agentic AI</span>
+            <span>USTRANSCOM CSO · AoI-902</span>
+            <span>SAM.gov · UEI registered</span>
+            <span>Wrote &amp; submitted Phase I</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT CTA -->
+  <section class="band" id="contact">
+    <div class="wrap">
+      <div class="cta">
+        <div class="cta-grid-bg"></div>
+        <div>
+          <h2>Tell us what you're applying for.</h2>
+          <p>A 30-minute consultation to assess fit, map the right solicitation, and outline a path to a submission. No obligation.</p>
+        </div>
+        <div class="cta-side">
+          <a href="mailto:hello@keystone.co" class="btn btn-primary btn-lg">Book a consultation
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+          </a>
+          <div class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"></path><path d="M4 8h16"></path></svg> Mon–Fri · responses within one business day</div>
+          <div class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Las Vegas, NV · serving applicants nationwide</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTERNAL: Launch Strategy cross-link -->
+  <style>
+    .launch-link{ border-top:1px solid var(--line); background:var(--bg-2); transition:background .4s var(--ease); }
+    .launch-link .ll-in{ max-width:var(--maxw); margin:0 auto; padding:34px 40px; display:flex; align-items:center; justify-content:space-between; gap:32px; }
+    .launch-poster{ display:flex; align-items:center; gap:24px; text-decoration:none; color:inherit; }
+    .lp-thumb{ width:132px; height:84px; border-radius:var(--r-md); overflow:hidden; position:relative; flex-shrink:0; background:#0b0b0d; border:1px solid rgba(255,255,255,.1); box-shadow:var(--shadow-sm); transition:transform .22s var(--ease), box-shadow .22s var(--ease); }
+    .lp-thumb .lpg{ position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px); background-size:18px 18px; -webkit-mask-image:radial-gradient(ellipse 90% 80% at 50% 0%,#000,transparent 80%); mask-image:radial-gradient(ellipse 90% 80% at 50% 0%,#000,transparent 80%); }
+    .lp-thumb .lpc{ position:absolute; inset:0; padding:13px 14px; display:flex; flex-direction:column; justify-content:space-between; }
+    .lp-thumb .lpc img{ height:15px; width:auto; }
+    .lp-thumb .lpc .lpt{ font-size:11px; font-weight:600; line-height:1.1; letter-spacing:-0.02em; color:#f4f4f5; }
+    .lp-thumb .lpc .lpt em{ font-style:normal; color:#a1a1aa; }
+    .launch-poster:hover .lp-thumb{ transform:translateY(-3px); box-shadow:var(--shadow-card); }
+    .ll-copy .ll-k{ font-family:var(--font-mono); font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase; color:var(--muted); margin-bottom:7px; }
+    .ll-copy h3{ font-size:19px; font-weight:600; letter-spacing:-0.02em; margin:0; color:var(--ink); }
+    .ll-copy p{ font-size:13.5px; font-weight:300; color:var(--ink-2); margin:5px 0 0; line-height:1.5; }
+    .ll-cta{ display:inline-flex; align-items:center; gap:8px; font-size:14px; font-weight:500; color:var(--on-brand); background:var(--brand); padding:12px 20px; border-radius:var(--r-sm); white-space:nowrap; transition:all .2s var(--ease); }
+    .ll-cta:hover{ background:var(--brand-hover); transform:translateY(-1px); box-shadow:var(--shadow-card); }
+    .ll-cta svg{ width:15px; height:15px; }
+    @media (max-width:760px){
+      .launch-link .ll-in{ flex-direction:column; align-items:flex-start; gap:22px; padding:28px 22px; }
+      .launch-poster{ gap:18px; }
+    }
+  </style>
+  <aside class="launch-link" aria-label="Internal: launch strategy">
+    <div class="ll-in">
+      <a class="launch-poster" href="marketing/Keystone Launch Strategy.html">
+        <span class="lp-thumb">
+          <span class="lpg"></span>
+          <span class="lpc">
+            <img src="assets/logo-mark-dark.png" alt="" />
+            <span class="lpt">Putting Keystone <em>on the map.</em></span>
+          </span>
+        </span>
+        <span class="ll-copy">
+          <span class="ll-k">Internal · Working document</span>
+          <h3>Launch &amp; go-to-market strategy</h3>
+          <p>Market study, positioning, channels, ad creative, launch film &amp; PR.</p>
+        </span>
+      </a>
+      <a class="ll-cta" href="marketing/Keystone Launch Strategy.html">Open strategy
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+      </a>
+    </div>
+  </aside>
+
+</main>
+
+<footer class="ft" id="contact-foot">
+  <div class="wrap">
+    <div class="ft-top">
+      <div class="ft-brand">
+        <img class="logo-light" src="assets/logo-lockup.png" alt="Keystone — Federal Grant Advisory" />
+        <img class="logo-dark" src="assets/logo-lockup-dark.png" alt="Keystone — Federal Grant Advisory" />
+        <p>Federal grant strategy and proposal development for organizations doing work worth funding.</p>
+      </div>
+      <div class="ft-col">
+        <h4>Firm</h4>
+        <a href="#services">Services</a>
+        <a href="#process">Process</a>
+        <a href="#work">Engagements</a>
+        <a href="#about">About</a>
+      </div>
+      <div class="ft-col">
+        <h4>Capabilities</h4>
+        <a href="#services">SBIR / STTR</a>
+        <a href="#services">Research grants</a>
+        <a href="#services">Federal contracts</a>
+        <a href="#services">Capture &amp; strategy</a>
+      </div>
+      <div class="ft-col">
+        <h4>Contact</h4>
+        <a href="#contact">Book a consultation</a>
+        <a href="mailto:hello@keystonegrants.gov">hello@keystone.co</a>
+        <a href="#contact">Las Vegas, NV</a>
+      </div>
+    </div>
+    <div class="ft-bot">
+      <div class="eyebrow">© 2026 Keystone Federal Grant Advisory</div>
+      <div class="eyebrow">Operational Intelligence · Built to spec</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var KEY='keystone-theme';
+    var root=document.documentElement;
+    var saved=localStorage.getItem(KEY);
+    if(!saved){ saved=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light'; }
+    root.setAttribute('data-theme',saved);
+    var btn=document.getElementById('themeBtn');
+    btn.addEventListener('click',function(){
+      var next=root.getAttribute('data-theme')==='dark'?'light':'dark';
+      root.setAttribute('data-theme',next);
+      localStorage.setItem(KEY,next);
+    });
+  })();
+</script>
+
+</body>
+</html>
