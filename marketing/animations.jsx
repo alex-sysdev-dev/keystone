@@ -1,5 +1,7 @@
 // @ds-adherence-ignore -- omelette starter scaffold (raw elements/hex/px by design)
 
+import React from 'react';
+
 /* BEGIN USAGE */
 // animations.jsx
 // Reusable animation starter: Stage, Timeline, Sprite, easing helpers.
@@ -679,4 +681,3 @@ Object.assign(window, {
   TextSprite, ImageSprite, RectSprite,
   Stage, PlaybackBar,
 });
-

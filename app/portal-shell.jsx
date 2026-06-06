@@ -1,5 +1,7 @@
 /* Keystone Portal — shell + shared UI (Babel). Exports to window. */
 
+import React from 'react';
+
 // ── Icons (Lucide-style line icons) ─────────────────────────────
 const _P = { fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round", strokeLinejoin: "round" };
 const ICONS = {

@@ -1,4 +1,6 @@
 /* Keystone Portal — screens B: Documents, Compliance, Messages, Billing, Onboarding */
+import React from 'react';
+
 const { Icon: IconB, Card: CardB, Pill: PillB, Avatar: AvatarB, Meter: MeterB, Ring: RingB } = window;
 
 const _now = () => { const d = new Date(); let h = d.getHours(), m = String(d.getMinutes()).padStart(2, "0"); const ap = h >= 12 ? "PM" : "AM"; h = h % 12 || 12; return `${h}:${m} ${ap}`; };

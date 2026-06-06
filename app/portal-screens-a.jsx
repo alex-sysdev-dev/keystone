@@ -1,4 +1,6 @@
 /* Keystone Portal — screens A: Dashboard, Proposal, Deadlines */
+import React from 'react';
+
 const { Icon, Card, Pill, Avatar, Meter, Ring, StageTracker, Countdown } = window;
 
 function StatTile({ icon, label, value, sub, kind }) {
