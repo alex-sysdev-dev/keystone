@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/",
-      "destination": "/Keystone.html"
+      "destination": "/app/Keystone Landing.html"
     }
   ]
 }

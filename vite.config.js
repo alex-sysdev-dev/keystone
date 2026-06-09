@@ -9,7 +9,7 @@ function getHtmlInputs() {
     main: resolve(__dirname, 'Keystone.html')
   };
   
-  const subFolders = ['services', 'marketing'];
+  const subFolders = ['services', 'marketing', 'app'];
   
   subFolders.forEach(folder => {
     const folderPath = resolve(__dirname, folder);
