@@ -3,6 +3,14 @@
     {
       "source": "/",
       "destination": "/app/Keystone Landing.html"
+    },
+    {
+      "source": "/Keystone Portal.html",
+      "destination": "/app/Keystone Portal.html"
+    },
+    {
+      "source": "/Keystone Landing.html",
+      "destination": "/app/Keystone Landing.html"
     }
   ]
 }
